@@ -238,7 +238,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 80vh;
     /* Ajusta esto según tus necesidades */
     background-color: #f0f0f0;
     /* Color de fondo fuera de la tabla */
