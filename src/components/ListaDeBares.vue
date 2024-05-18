@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <!-- <div v-if="isLoading" class="loader">Cargando...</div> -->
         <div v-if="isLoading" class="loader">
             <div class="flower-spinner">
                 <div class="dots-container">

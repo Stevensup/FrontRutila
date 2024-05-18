@@ -5,9 +5,10 @@
                 <img width="100" height="50" src="../assets/RutilaIcon.png" alt="Rutila Icon" class="nav-icon">
             </div>
             <div class="navbar-right">
-                <button class="nav-button" @click="$router.push('/Customers')">Customers</button>
                 <button class="nav-button" @click="$router.push('/ListaDeBares')">Bares</button>
+                <button class="nav-button" @click="$router.push('/Customers')">Customers</button>
                 <button class="nav-button" @click="$router.push('/Users')">Users</button>
+                <br>
                 <button class="nav-button-logaut" @click="$router.push('/')">Logaut</button>
             </div>
         </nav>

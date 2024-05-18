@@ -11,7 +11,7 @@
             Cargando...
         </div>
         <div class="table-wrapper">
-            <input type="text" v-model="search" placeholder="Buscar...">
+            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
             <table>
                 <thead>
                     <tr>
@@ -24,22 +24,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="customer in customers" :key="`${customer.id}-${customer.name}`">
+                    <tr v-if="filteredAndPaginatedCustomers.length === 0">
+                        <td colspan="6">
+                            <div class="no-results">
+                                <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
+                                <span>Sin registros coincidentes</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-else v-for="customer in filteredAndPaginatedCustomers"
+                        :key="`${customer.id}-${customer.name}`">
                         <td>{{ customer.id }}</td>
                         <td>{{ customer.name }}</td>
                         <td>{{ customer.location }}</td>
                         <td>{{ customer.phone }}</td>
                         <td>{{ customer.email }}</td>
-
                         <td>
-                            <button class="delete" @click="deleteBar(customer.id)">Eliminar</button>
+                            <button class="delete" @click="deleteCustomer(customer.id)">Eliminar</button>
                             <button class="update"
-                                @click="selectedBar = customer; showUpdateModal = true">Actualizar</button>
+                                @click="selectedCustomer = customer; showUpdateModal = true">Actualizar</button>
                             <!-- <button class="updatePassword" @click="updatePassword(customer.id) = customer; showUpdatePasswordModal = true">Actualizar Contraseña</button> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div class="pagination">
+                <button @click="prevPage">Página anterior</button>
+                <span>Página {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage">Página siguiente</button>
+
+            </div>
             <div>
                 <button @click="showModal = true">Agregar un Cliente</button>
             </div>
@@ -85,6 +99,9 @@ export default {
     name: 'my-customers',
     data() {
         return {
+            customers: [],
+            currentPage: 1,
+            itemsPerPage: 6,
             isLoading: false,
             showModal: false,
             showUpdateModal: false,
@@ -101,13 +118,20 @@ export default {
                 phone: '',
                 email: ''
             },
-            customers: []
+
         }
     },
-    mounted() {
-        this.fetchCustomers();
-    },
     methods: {
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
         fetchCustomers() {
             fetch('http://localhost:8090/client/listar')
                 .then(response => response.json())
@@ -176,51 +200,150 @@ export default {
                     console.error('Error deleting customer:', error);
                 });
         },
-        // updatePassword(id) {
-        //     fetch(`http://localhost:8090/client/actualizar/${this.selectedCustomer.id}`, {
-        //         method: 'PUT',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(this.selectedCustomer)
-        //     })
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             const index = this.customers.findIndex(customer => customer.id === data.id);
-        //             this.customers.splice(index, 1, data);
-        //             this.selectedCustomer = {
-        //                 name: '',
-        //                 location: '',
-        //                 phone: '',
-        //                 email: ''
-        //             };
-        //             this.showUpdatePasswordModal = false;
-        //         })
-        //         .catch(error => {
-        //             console.error('Error updating customer:', error);
-        //         });
-        // }
+
 
     },
+    mounted() {
+        this.fetchCustomers();
+    },
     computed: {
-        filteredCustomers() {
-            return this.customers.filter(customer => {
-                return customer.name.toLowerCase().includes(this.search.toLowerCase());
+        filteredAndPaginatedCustomers() {
+            const filtered = this.customers.filter(customer => {
+                return Object.values(customer).some(val => {
+                    if (val === null || val === undefined) {
+                        return false;
+                    }
+
+                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.search.toLowerCase();
+
+                    return lowerCaseVal.includes(lowerCaseSearch);
+                });
             });
+
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+
+            return filtered.slice(start, end);
+        },
+        totalPages() {
+            const filtered = this.customers.filter(customer => {
+                return Object.values(customer).some(val => {
+                    if (val === null || val === undefined) {
+                        return false;
+                    }
+
+                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.search.toLowerCase();
+
+                    return lowerCaseVal.includes(lowerCaseSearch);
+                });
+            });
+
+            return Math.ceil(filtered.length / this.itemsPerPage);
         }
     }
+
 }
 </script>
 
 <style scoped>
+.no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.no-results span {
+    font-size: 2em;
+    /* Ajusta este valor para cambiar el tamaño del texto */
+}
+
+.search-input {
+    background-color: #ffffff;
+    outline: none;
+    border: none;
+    font-weight: bold;
+}
+
+.search-input::placeholder {
+    font-weight: bold;
+}
+
+
+body {
+    font-family: Helvetica Neue, Arial, sans-serif;
+    font-size: 14px;
+}
+
+table {
+    border: 2px solid #0F5944;
+    border-radius: 3px;
+    background-color: #fff;
+}
+
+th {
+    background-color: #0F5944;
+    color: rgba(255, 255, 255, 0.66);
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+th,
+td {
+    min-width: 120px;
+    padding: 10px 20px;
+}
+
+th.active {
+    color: #fff;
+}
+
+th.active .arrow {
+    opacity: 1;
+}
+
+.arrow {
+    display: inline-block;
+    vertical-align: middle;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    opacity: 0.66;
+}
+
+.arrow.asc {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #fff;
+}
+
+.arrow.dsc {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #fff;
+}
+
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 0;
+}
+
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 80vh;
-    /* Ajusta esto según tus necesidades */
-    background-color: #f0f0f0;
-    /* Color de fondo fuera de la tabla */
 }
 
 .table-wrapper {
@@ -251,7 +374,8 @@ tr:hover {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #0F5944;
+    /* Green */
     border: none;
     color: white;
     padding: 10px 20px;
@@ -265,7 +389,7 @@ button {
 }
 
 button:hover {
-    background-color: #0cb6b9;
+    background-color: #F28A2E;
 }
 
 form {
@@ -392,12 +516,17 @@ button[type="submit"]:hover {
 }
 
 .delete {
-    background-color: #f44336;
+    background-color: #F28A2E;
 
 }
 
 .update {
-    background-color: #2196f3;
+    background-color: #11BFBF;
+
+}
+
+.add {
+    background-color: #90BF2A;
 
 }
 
@@ -422,7 +551,7 @@ button[type="submit"]:hover {
 }
 
 .flower-spinner .smaller-dot {
-    background: #ff1d5e;
+    background: #0cb6b9;
     height: 100%;
     width: 100%;
     border-radius: 50%;
@@ -431,7 +560,7 @@ button[type="submit"]:hover {
 }
 
 .flower-spinner .bigger-dot {
-    background: #ff1d5e;
+    background: #0cb6b9;
     height: 100%;
     width: 100%;
     padding: 10%;
@@ -443,14 +572,14 @@ button[type="submit"]:hover {
 
     0%,
     100% {
-        box-shadow: rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px;
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
     }
 
     50% {
@@ -459,26 +588,26 @@ button[type="submit"]:hover {
 
     25%,
     75% {
-        box-shadow: rgb(255, 29, 94) 26px 0px 0px,
-            rgb(255, 29, 94) -26px 0px 0px,
-            rgb(255, 29, 94) 0px 26px 0px,
-            rgb(255, 29, 94) 0px -26px 0px,
-            rgb(255, 29, 94) 19px -19px 0px,
-            rgb(255, 29, 94) 19px 19px 0px,
-            rgb(255, 29, 94) -19px -19px 0px,
-            rgb(255, 29, 94) -19px 19px 0px;
+        box-shadow: rgb(12, 182, 185) 26px 0px 0px,
+            rgb(12, 182, 185) -26px 0px 0px,
+            rgb(12, 182, 185) 0px 26px 0px,
+            rgb(12, 182, 185) 0px -26px 0px,
+            rgb(12, 182, 185) 19px -19px 0px,
+            rgb(12, 182, 185) 19px 19px 0px,
+            rgb(12, 182, 185) -19px -19px 0px,
+            rgb(12, 182, 185) -19px 19px 0px;
     }
 
     100% {
         transform: rotate(360deg);
-        box-shadow: rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px;
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
     }
 }
 
@@ -486,37 +615,37 @@ button[type="submit"]:hover {
 
     0%,
     100% {
-        box-shadow: rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px;
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
     }
 
     25%,
     75% {
-        box-shadow: rgb(255, 29, 94) 14px 0px 0px,
-            rgb(255, 29, 94) -14px 0px 0px,
-            rgb(255, 29, 94) 0px 14px 0px,
-            rgb(255, 29, 94) 0px -14px 0px,
-            rgb(255, 29, 94) 10px -10px 0px,
-            rgb(255, 29, 94) 10px 10px 0px,
-            rgb(255, 29, 94) -10px -10px 0px,
-            rgb(255, 29, 94) -10px 10px 0px;
+        box-shadow: rgb(12, 182, 185) 14px 0px 0px,
+            rgb(12, 182, 185) -14px 0px 0px,
+            rgb(12, 182, 185) 0px 14px 0px,
+            rgb(12, 182, 185) 0px -14px 0px,
+            rgb(12, 182, 185) 10px -10px 0px,
+            rgb(12, 182, 185) 10px 10px 0px,
+            rgb(12, 182, 185) -10px -10px 0px,
+            rgb(12, 182, 185) -10px 10px 0px;
     }
 
     100% {
-        box-shadow: rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px;
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
     }
 }
 </style>
