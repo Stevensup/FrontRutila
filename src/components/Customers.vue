@@ -15,7 +15,6 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Location</th>
                         <th>Phone</th>
@@ -33,8 +32,7 @@
                         </td>
                     </tr>
                     <tr v-else v-for="customer in filteredAndPaginatedCustomers"
-                        :key="`${customer.id}-${customer.name}`">
-                        <td>{{ customer.id }}</td>
+                        :key="`${customer.phone}-${customer.name}`">
                         <td>{{ customer.name }}</td>
                         <td>{{ customer.location }}</td>
                         <td>{{ customer.phone }}</td>
@@ -60,7 +58,7 @@
             <div v-if="showModal" class="modal">
                 <div class="modal-content">
                     <span class="close" @click="showModal = false">&times;</span>
-                    <form @submit.prevent="addCustomer">
+                    <form @submit.prevent="saveCustomer">
                         <label for="name">Name:</label>
                         <input type="text" id="name" v-model="newCustomer.name" required>
                         <label for="location">Location:</label>
@@ -95,6 +93,7 @@
 
 
 <script>
+import axios from 'axios';
 export default {
     name: 'my-customers',
     data() {
@@ -133,73 +132,66 @@ export default {
             }
         },
         fetchCustomers() {
-            fetch('http://localhost:8090/client/listar')
-                .then(response => response.json())
-                .then(data => {
-                    this.customers = data;
-                })
-                .catch(error => {
-                    console.error('Error fetching customers:', error);
-                });
+            axios.get('http://localhost:8090/client/listar')
+                .then(response => { this.customers = response.data; })
+                .catch(error => { console.error(error); });
         },
-        addCustomer() {
-            fetch('http://localhost:8090/client/crear', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(this.newCustomer)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    this.customers.push(data);
+        saveCustomer() {
+            axios.post('http://localhost:8090/client/registrar', this.newCustomer)
+                .then(() => {
+                    this.fetchCustomers();
+                    this.showModal = false;
                     this.newCustomer = {
                         name: '',
                         location: '',
                         phone: '',
                         email: ''
                     };
-                    this.showModal = false;
                 })
-                .catch(error => {
-                    console.error('Error adding customer:', error);
+                .catch(error => { console.error(error); })
+                .finally(() => {
+                    this.showModal = false;
+                    this.isLoading = true;
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 750);
+                });
+
+        },
+        deleteCustomer(id) {
+            axios.put(`http://localhost:8090/client/eliminar/${id}`)
+                .then(() => {
+                    this.fetchCustomers();
+                })
+                .catch(error => { console.error(error); })
+                .finally(() => {
+                    this.isLoading = true;
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 750);
                 });
         },
         updateCustomer() {
-            fetch(`http://localhost:8090/client/actualizar/${this.selectedCustomer.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(this.selectedCustomer)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const index = this.customers.findIndex(customer => customer.id === data.id);
-                    this.customers.splice(index, 1, data);
+            axios.put(`http://localhost:8090/client/actualizar/${this.selectedCustomer.id}`, this.selectedCustomer)
+                .then(() => {
+                    this.fetchCustomers();
+                    this.showUpdateModal = false;
                     this.selectedCustomer = {
                         name: '',
                         location: '',
                         phone: '',
                         email: ''
                     };
+                })
+                .catch(error => { console.error(error); })
+                .finally(() => {
                     this.showUpdateModal = false;
-                })
-                .catch(error => {
-                    console.error('Error updating customer:', error);
+                    this.isLoading = true;
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 750);
                 });
-        },
-        deleteCustomer(id) {
-            fetch(`http://localhost:8090/client/eliminar/${id}`, {
-                method: 'DELETE'
-            })
-                .then(() => {
-                    this.customers = this.customers.filter(customer => customer.id !== id);
-                })
-                .catch(error => {
-                    console.error('Error deleting customer:', error);
-                });
-        },
+        }
 
 
     },
