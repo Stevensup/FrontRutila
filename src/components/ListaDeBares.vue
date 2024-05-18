@@ -25,22 +25,27 @@
                     </tr>
                 </thead>
                 <tbody>
-        <tr v-if="filteredAndPaginatedBars.length === 0">
-            <td colspan="6">Sin registros coincidentes</td>
-        </tr>
-        <tr v-else v-for="bar in filteredAndPaginatedBars" :key="`${bar.name}-${bar.phone}`">
-            <td>{{ bar.name }}</td>
-            <td>{{ bar.location }}</td>
-            <td>{{ bar.phone }}</td>
-            <td>{{ bar.entrytime }}</td>
-            <td>{{ bar.closingtime }}</td>
-            <td>
-                <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
-                <button class="update"
-                    @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
-            </td>
-        </tr>
-    </tbody>
+                    <tr v-if="filteredAndPaginatedBars.length === 0">
+                        <td colspan="6">
+                            <div class="no-results">
+                                <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
+                                <span>Sin registros coincidentes</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-else v-for="bar in filteredAndPaginatedBars" :key="`${bar.name}-${bar.phone}`">
+                        <td>{{ bar.name }}</td>
+                        <td>{{ bar.location }}</td>
+                        <td>{{ bar.phone }}</td>
+                        <td>{{ bar.entrytime }}</td>
+                        <td>{{ bar.closingtime }}</td>
+                        <td>
+                            <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
+                            <button class="update"
+                                @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <div class="pagination">
                 <button @click="prevPage">Página anterior</button>
@@ -277,6 +282,17 @@ export default {
 </script>
 
 <style scoped>
+
+.no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.no-results span {
+    font-size: 2em; /* Ajusta este valor para cambiar el tamaño del texto */
+}
 
 .search-input {
     float: left;
