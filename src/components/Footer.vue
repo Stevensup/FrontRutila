@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer">
+    <footer class="footer" v-if="$route.name !== 'HelloWorld'">
       <!-- Aquí va tu código de footer -->
       <p>© 2021 Rutila</p>
     </footer>

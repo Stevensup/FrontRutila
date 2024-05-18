@@ -52,7 +52,7 @@ export default {
 .container {
   display: flex;
   justify-content: space-between;
-  height: 100vh;
+  height: 80vh;
   overflow: hidden;
 }
 
