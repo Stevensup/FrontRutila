@@ -8,6 +8,9 @@
                 <button class="nav-button" @click="$router.push('/ListaDeBares')">Bares</button>
                 <button class="nav-button" @click="$router.push('/Customers')">Customers</button>
                 <button class="nav-button" @click="$router.push('/Users')">Users</button>
+                <button class="nav-button" @click="$router.push('/Drinks')">Drinks</button>
+                <button class="nav-button" @click="$router.push('/Orders')">Orders</button>
+                <button class="nav-button" @click="$router.push('/Invoices')">Invoices</button>
                 <br>
                 <button class="nav-button-logaut" @click="$router.push('/')">Logaut</button>
             </div>
@@ -50,6 +53,7 @@ export default {
     display: flex;
     align-items: center;
 }
+
 .nav-button {
     background-color: #0F5944;
     color: #fff;
@@ -76,7 +80,9 @@ export default {
 }
 
 .nav-button-logaut:hover {
-    background-color: red; /* Cambia el color de fondo a rojo cuando se pasa el mouse por encima */
-    border: 2px solid red; /* Cambia el color del borde a rojo cuando se pasa el mouse por encima */
+    background-color: red;
+    /* Cambia el color de fondo a rojo cuando se pasa el mouse por encima */
+    border: 2px solid red;
+    /* Cambia el color del borde a rojo cuando se pasa el mouse por encima */
 }
 </style>
