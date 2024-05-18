@@ -3,6 +3,8 @@ import HelloWorld from "./components/HelloWorld.vue";
 import ListaDeBares from "./components/ListaDeBares.vue";
 import Customers from "./components/Customers.vue";
 import Users from "./components/Users.vue";
+import Bienvenida from "./components/Bienvenida.vue"; 
+
 
 const routes = [
   {
@@ -23,7 +25,12 @@ const routes = [
   {
     path: "/Users",
     name: "Users",
-    component: Users
+    component: Users,
+  },
+  {
+    path: "/Bienvenida",
+    name: "Bienvenida",
+    component: Bienvenida,
   }
 ];
 

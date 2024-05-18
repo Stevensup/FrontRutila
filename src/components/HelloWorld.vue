@@ -36,7 +36,7 @@ export default {
       const hashedPassword = await bcrypt.hash(this.user.userPassword, saltRounds);
        // Ahora puedes utilizar `hashedPassword` para las operaciones de autenticación
        console.log({ ...this.user, userPassword: hashedPassword });
-      this.$router.push('/ListaDeBares');
+      this.$router.push('/Bienvenida');
   }
 }
 }

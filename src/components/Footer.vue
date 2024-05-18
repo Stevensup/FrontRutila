@@ -1,7 +1,6 @@
 <template>
     <footer class="footer" v-if="$route.name !== 'HelloWorld'">
-      <!-- Aquí va tu código de footer -->
-      <p>© 2021 Rutila</p>
+      <p>© 2024 Rutila</p>
     </footer>
   </template>
   
@@ -19,5 +18,10 @@
     padding: 4px;
     text-align: center;
     font-size: 20px;
+    bottom: 0;
+    width: 100%;
+    position: fixed;
   }
+  
+
   </style>
