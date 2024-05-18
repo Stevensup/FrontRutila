@@ -225,8 +225,6 @@ export default {
 
 .table-wrapper {
     background-color: #fff;
-    /* Color de fondo de la tabla */
-    /* Añade más estilos para la tabla según tus necesidades */
 }
 
 table {
@@ -254,7 +252,6 @@ tr:hover {
 
 button {
     background-color: #4CAF50;
-    /* Green */
     border: none;
     color: white;
     padding: 10px 20px;

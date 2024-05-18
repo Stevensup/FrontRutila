@@ -1,5 +1,4 @@
 <template>
-    <!-- <nav class="navbar"> -->
         <nav class="navbar" v-if="$route.name !== 'HelloWorld'">
         <button class="nav-button" @click="$router.push('/Customers')">Customers</button>
         <button class="nav-button" @click="$router.push('/ListaDeBares')">Bares</button>
@@ -17,7 +16,6 @@ export default {
 
 <style scoped>
 .navbar {
-    /* Aquí van tus estilos para el navbar */
     background-color: #0cb6b9;
     padding: 10px;
     display: flex;
@@ -26,8 +24,8 @@ export default {
 }
 
 .nav-button {
-    background-color: #fff;
-    color: #000000;
+    background-color: transparent;
+    color: #fff;
     border: none;
     padding: 10px 20px;
     margin-right: 10px;

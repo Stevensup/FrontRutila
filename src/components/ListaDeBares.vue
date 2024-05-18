@@ -229,7 +229,7 @@ export default {
             });
         }
     }
-    // Resto del código...
+    
 };
 </script>
 

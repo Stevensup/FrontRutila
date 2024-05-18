@@ -12,7 +12,6 @@
   
   <style scoped>
   .footer {
-    /* Aquí van tus estilos para el footer */
     background-color: #0cb6b9;
     color: #0b0505;
     padding: 4px;

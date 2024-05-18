@@ -31,24 +31,24 @@ export default {
     };
   },
   methods: {
-    async login(){
+    async login() {
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(this.user.userPassword, saltRounds);
-       // Ahora puedes utilizar `hashedPassword` para las operaciones de autenticación
-       console.log({ ...this.user, userPassword: hashedPassword });
+      // Ahora puedes utilizar `hashedPassword` para las operaciones de autenticación
+      console.log({ ...this.user, userPassword: hashedPassword });
       this.$router.push('/Bienvenida');
+    }
   }
-}
 }
 </script>
 
 <style scoped>
-
 .submit {
   background-color: #105aa5;
   color: white;
   cursor: pointer;
 }
+
 .container {
   display: flex;
   justify-content: space-between;
@@ -56,7 +56,8 @@ export default {
   overflow: hidden;
 }
 
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
 }
@@ -96,7 +97,8 @@ label {
   margin-top: 10px;
 }
 
-input, button {
+input,
+button {
   margin-top: 5px;
   padding: 10px;
   border: none;
@@ -132,6 +134,4 @@ button:hover {
     height: auto;
   }
 }
-
-
 </style>
