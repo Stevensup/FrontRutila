@@ -12,7 +12,7 @@
             Cargando...
         </div>
         <div class="table-wrapper">
-            <input type="text" v-model="search" placeholder="Buscar...">
+            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
             <table>
                 <thead>
                     <tr>
@@ -25,19 +25,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="bar in filteredAndPaginatedBars" :key="`${bar.name}-${bar.phone}`">
-                        <td>{{ bar.name }}</td>
-                        <td>{{ bar.location }}</td>
-                        <td>{{ bar.phone }}</td>
-                        <td>{{ bar.entrytime }}</td>
-                        <td>{{ bar.closingtime }}</td>
-                        <td>
-                            <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
-                            <button class="update"
-                                @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
-                        </td>
-                    </tr>
-                </tbody>
+        <tr v-if="filteredAndPaginatedBars.length === 0">
+            <td colspan="6">Sin registros coincidentes</td>
+        </tr>
+        <tr v-else v-for="bar in filteredAndPaginatedBars" :key="`${bar.name}-${bar.phone}`">
+            <td>{{ bar.name }}</td>
+            <td>{{ bar.location }}</td>
+            <td>{{ bar.phone }}</td>
+            <td>{{ bar.entrytime }}</td>
+            <td>{{ bar.closingtime }}</td>
+            <td>
+                <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
+                <button class="update"
+                    @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
+            </td>
+        </tr>
+    </tbody>
             </table>
             <div class="pagination">
                 <button @click="prevPage">Página anterior</button>
@@ -274,6 +277,80 @@ export default {
 </script>
 
 <style scoped>
+
+.search-input {
+    float: left;
+    outline: none;
+    border: none;
+    font-weight: bold;
+}
+
+.search-input::placeholder {
+    font-weight: bold;
+}
+
+
+body {
+    font-family: Helvetica Neue, Arial, sans-serif;
+    font-size: 14px;
+}
+
+table {
+    border: 2px solid #0cb6b9;
+    border-radius: 3px;
+    background-color: #fff;
+}
+
+th {
+    background-color: #0cb6b9;
+    color: rgba(255, 255, 255, 0.66);
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+th,
+td {
+    min-width: 120px;
+    padding: 10px 20px;
+}
+
+th.active {
+    color: #fff;
+}
+
+th.active .arrow {
+    opacity: 1;
+}
+
+.arrow {
+    display: inline-block;
+    vertical-align: middle;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    opacity: 0.66;
+}
+
+.arrow.asc {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #fff;
+}
+
+.arrow.dsc {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #fff;
+}
+
+
 .pagination {
     display: flex;
     justify-content: space-between;
@@ -285,15 +362,10 @@ export default {
     justify-content: center;
     align-items: center;
     height: 80vh;
-    /* Ajusta esto según tus necesidades */
-    background-color: #f0f0f0;
-    /* Color de fondo fuera de la tabla */
 }
 
 .table-wrapper {
     background-color: #fff;
-    /* Color de fondo de la tabla */
-    /* Añade más estilos para la tabla según tus necesidades */
 }
 
 table {
@@ -492,7 +564,7 @@ button[type="submit"]:hover {
 }
 
 .flower-spinner .smaller-dot {
-    background: #ff1d5e;
+    background: #0cb6b9;
     height: 100%;
     width: 100%;
     border-radius: 50%;
@@ -501,7 +573,7 @@ button[type="submit"]:hover {
 }
 
 .flower-spinner .bigger-dot {
-    background: #ff1d5e;
+    background: #0cb6b9;
     height: 100%;
     width: 100%;
     padding: 10%;
@@ -513,14 +585,14 @@ button[type="submit"]:hover {
 
     0%,
     100% {
-        box-shadow: rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px;
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
     }
 
     50% {
@@ -529,26 +601,26 @@ button[type="submit"]:hover {
 
     25%,
     75% {
-        box-shadow: rgb(255, 29, 94) 26px 0px 0px,
-            rgb(255, 29, 94) -26px 0px 0px,
-            rgb(255, 29, 94) 0px 26px 0px,
-            rgb(255, 29, 94) 0px -26px 0px,
-            rgb(255, 29, 94) 19px -19px 0px,
-            rgb(255, 29, 94) 19px 19px 0px,
-            rgb(255, 29, 94) -19px -19px 0px,
-            rgb(255, 29, 94) -19px 19px 0px;
+        box-shadow: rgb(12, 182, 185) 26px 0px 0px,
+            rgb(12, 182, 185) -26px 0px 0px,
+            rgb(12, 182, 185) 0px 26px 0px,
+            rgb(12, 182, 185) 0px -26px 0px,
+            rgb(12, 182, 185) 19px -19px 0px,
+            rgb(12, 182, 185) 19px 19px 0px,
+            rgb(12, 182, 185) -19px -19px 0px,
+            rgb(12, 182, 185) -19px 19px 0px;
     }
 
     100% {
         transform: rotate(360deg);
-        box-shadow: rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px;
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
     }
 }
 
@@ -556,37 +628,37 @@ button[type="submit"]:hover {
 
     0%,
     100% {
-        box-shadow: rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px;
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
     }
 
     25%,
     75% {
-        box-shadow: rgb(255, 29, 94) 14px 0px 0px,
-            rgb(255, 29, 94) -14px 0px 0px,
-            rgb(255, 29, 94) 0px 14px 0px,
-            rgb(255, 29, 94) 0px -14px 0px,
-            rgb(255, 29, 94) 10px -10px 0px,
-            rgb(255, 29, 94) 10px 10px 0px,
-            rgb(255, 29, 94) -10px -10px 0px,
-            rgb(255, 29, 94) -10px 10px 0px;
+        box-shadow: rgb(12, 182, 185) 14px 0px 0px,
+            rgb(12, 182, 185) -14px 0px 0px,
+            rgb(12, 182, 185) 0px 14px 0px,
+            rgb(12, 182, 185) 0px -14px 0px,
+            rgb(12, 182, 185) 10px -10px 0px,
+            rgb(12, 182, 185) 10px 10px 0px,
+            rgb(12, 182, 185) -10px -10px 0px,
+            rgb(12, 182, 185) -10px 10px 0px;
     }
 
     100% {
-        box-shadow: rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px,
-            rgb(255, 29, 94) 0px 0px 0px;
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
     }
 }
 </style>
