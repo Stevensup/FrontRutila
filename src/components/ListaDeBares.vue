@@ -54,7 +54,7 @@
 
             </div>
             <div>
-                <button @click="showModal = true">Agregar Bar</button>
+                <button class="add" @click="showModal = true">Agregar Bar</button>
             </div>
             <div v-if="showModal" class="modal">
                 <div class="modal-content">
@@ -295,8 +295,7 @@ export default {
 }
 
 .search-input {
-    background-color:#93c2c2;
-    float: left;
+    background-color:#ffffff;
     outline: none;
     border: none;
     font-weight: bold;
@@ -314,13 +313,13 @@ body {
 }
 
 table {
-    border: 2px solid #0cb6b9;
+    border: 2px solid #0F5944;
     border-radius: 3px;
     background-color: #fff;
 }
 
 th {
-    background-color: #0cb6b9;
+    background-color: #0F5944;
     color: rgba(255, 255, 255, 0.66);
     cursor: pointer;
     -webkit-user-select: none;
@@ -410,7 +409,7 @@ tr:hover {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #0F5944;
     /* Green */
     border: none;
     color: white;
@@ -425,7 +424,7 @@ button {
 }
 
 button:hover {
-    background-color: #0cb6b9;
+    background-color: #F28A2E;
 }
 
 form {
@@ -552,12 +551,17 @@ button[type="submit"]:hover {
 }
 
 .delete {
-    background-color: #f44336;
+    background-color: #F28A2E;
 
 }
 
 .update {
-    background-color: #2196f3;
+    background-color: #11BFBF;
+
+}
+
+.add {
+    background-color: #90BF2A;
 
 }
 
