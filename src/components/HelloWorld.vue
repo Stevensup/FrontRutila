@@ -44,7 +44,7 @@ export default {
 
 <style scoped>
 .submit {
-  background-color: #105aa5;
+  background-color: #0F5944;
   color: white;
   cursor: pointer;
 }
@@ -103,18 +103,18 @@ button {
   padding: 10px;
   border: none;
   border-radius: 5px;
-  border: 1px solid #52708d;
+  border: 1px solid #0F5944;
 
 }
 
 button {
-  background-color: #42b983;
+  background-color: #0F5944;
   color: white;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #2a665c;
+  background-color: #F28A2E;
 }
 
 /* Media query para pantallas con una anchura máxima de 600px */

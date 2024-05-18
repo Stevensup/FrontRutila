@@ -59,7 +59,7 @@
             <div v-if="showModal" class="modal">
                 <div class="modal-content">
                     <span @click="showModal = false" class="close">&times;</span>
-                    <form @submit.prevent="saveBar">
+                    <form @submit.prevent="saveBar" class="form">
                         <label for="nombre">Nombre:</label>
                         <input type="text" id="nombre" v-model="bar.name" required>
 
@@ -70,10 +70,10 @@
                         <input type="text" id="telefono" v-model="bar.phone" required>
 
                         <label for="horario_apertura">Horario Apertura:</label>
-                        <input type="text" id="horario_apertura" v-model="bar.entrytime" required>
+                        <input type="time" id="horario_apertura" v-model="bar.entrytime" required>
 
                         <label for="horario_cierre">Horario Cierre:</label>
-                        <input type="text" id="horario_cierre" v-model="bar.closingtime" required>
+                        <input type="time" id="horario_cierre" v-model="bar.closingtime" required>
 
                         <button type="submit">Guardar</button>
                     </form>
@@ -93,10 +93,10 @@
                         <input type="text" id="telefono" v-model="selectedBar.phone" required>
 
                         <label for="horario_apertura">Horario Apertura:</label>
-                        <input type="text" id="horario_apertura" v-model="selectedBar.entrytime" required>
+                        <input type="time" id="horario_apertura" v-model="bar.entrytime" required>
 
                         <label for="horario_cierre">Horario Cierre:</label>
-                        <input type="text" id="horario_cierre" v-model="selectedBar.closingtime" required>
+                        <input type="time" id="horario_cierre" v-model="bar.closingtime" required>
 
                         <button type="submit">Actualizar</button>
                     </form>
@@ -282,7 +282,6 @@ export default {
 </script>
 
 <style scoped>
-
 .no-results {
     display: flex;
     flex-direction: column;
@@ -291,11 +290,12 @@ export default {
 }
 
 .no-results span {
-    font-size: 2em; /* Ajusta este valor para cambiar el tamaño del texto */
+    font-size: 2em;
+    /* Ajusta este valor para cambiar el tamaño del texto */
 }
 
 .search-input {
-    background-color:#ffffff;
+    background-color: #ffffff;
     outline: none;
     border: none;
     font-weight: bold;
