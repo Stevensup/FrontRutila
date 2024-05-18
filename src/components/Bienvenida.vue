@@ -21,7 +21,10 @@ export default {
 }
 
 h1 {
-    font-size: 2em;
+    font-size: 6em;
+    color: #ffffff;
+    text-shadow: 0 0 10px #12beb5, 0 0 20px #00ff00, 0 0 30px #12beb5, 0 0 40px #12beb5, 0 0 50px #12beb5, 0 0 60px #12beb5, 0 0 70px #12beb5;
+    
 }
 
 p {

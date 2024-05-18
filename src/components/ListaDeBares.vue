@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="bar in filteredBars" :key="`${bar.name}-${bar.phone}`">
+                    <tr v-for="bar in filteredAndPaginatedBars" :key="`${bar.name}-${bar.phone}`">
                         <td>{{ bar.name }}</td>
                         <td>{{ bar.location }}</td>
                         <td>{{ bar.phone }}</td>
@@ -39,6 +39,12 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="pagination">
+                <button @click="prevPage">Página anterior</button>
+                <span>Página {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage">Página siguiente</button>
+
+            </div>
             <div>
                 <button @click="showModal = true">Agregar Bar</button>
             </div>
@@ -100,6 +106,9 @@ export default {
     name: 'ListaBares',
     data() {
         return {
+            bars: [],
+            currentPage: 1,
+            itemsPerPage: 6,
             isLoading: false,
             showModal: false,
             showUpdateModal: false,
@@ -112,7 +121,6 @@ export default {
                 closingtime: ''
             },
             search: '',
-            bars: [],
             bar: {
                 name: '',
                 location: '',
@@ -123,6 +131,16 @@ export default {
         };
     },
     methods: {
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
         // Método para obtener la lista de bares desde el servidor
         fetchBars() {
             // Aquí va la lógica para hacer la petición HTTP y obtener los bares
@@ -209,31 +227,59 @@ export default {
         this.fetchBars();
     },
     computed: {
-        filteredBars() {
-            if (!this.search) {
-                return this.bars;
-            }
-
-            const lowerCaseSearch = this.search.toLowerCase();
-
-            return this.bars.filter(bar => {
+        filteredAndPaginatedBars() {
+            const filtered = this.bars.filter(bar => {
                 return Object.values(bar).some(val => {
                     if (val === null || val === undefined) {
                         return false;
                     }
 
                     const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.search.toLowerCase();
 
                     return lowerCaseVal.includes(lowerCaseSearch);
                 });
             });
+
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+
+            return filtered.slice(start, end);
+        },
+        totalPages() {
+            const filtered = this.bars.filter(bar => {
+                return Object.values(bar).some(val => {
+                    if (val === null || val === undefined) {
+                        return false;
+                    }
+
+                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.search.toLowerCase();
+
+                    return lowerCaseVal.includes(lowerCaseSearch);
+                });
+            });
+
+            return Math.ceil(filtered.length / this.itemsPerPage);
+        },
+        paginatedData() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.bars.slice(start, end);
         }
+
     }
-    
+
 };
 </script>
 
 <style scoped>
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 0;
+}
+
 .container {
     display: flex;
     justify-content: center;

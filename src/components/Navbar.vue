@@ -20,6 +20,10 @@ export default {
     padding: 10px;
     display: flex;
     justify-content: space-around;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
     
 }
 
