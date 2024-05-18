@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
-import ListaDeBares from "./components/ListaDeBares.vue";
+import ListaDeBares from "./components/Bars.vue";
 import Customers from "./components/Customers.vue";
 import Users from "./components/Users.vue";
-import Bienvenida from "./components/Bienvenida.vue"; 
+import Welcome from "./components/Welcome.vue"; 
 
 
 const routes = [
@@ -28,9 +28,9 @@ const routes = [
     component: Users,
   },
   {
-    path: "/Bienvenida",
-    name: "Bienvenida",
-    component: Bienvenida,
+    path: "/Welcome",
+    name: "Welcome",
+    component: Welcome,
   }
 ];
 

@@ -1,7 +1,6 @@
 <template>
     <div class="bienvenida">
         <h1>Bienvenido a Rutila</h1>
-        <p>aca encontraras la gestion de todos los bares de la ciudad</p>
         <img width="500" height="500" src="../assets/tita2.png" alt="Logo de Rutila">
 
     </div>
