@@ -1,6 +1,7 @@
 <template>
     <div class="table-container">
         <nav class="navbar" v-if="$route.name !== 'HelloWorld'">
+            <img width="100" height="50" src="../assets/RutilaIcon.png" alt="Rutila Icon" class="nav-icon">
             <button class="nav-button" @click="$router.push('/Customers')">Customers</button>
             <button class="nav-button" @click="$router.push('/ListaDeBares')">Bares</button>
             <button class="nav-button" @click="$router.push('/Users')">Users</button>
@@ -24,7 +25,7 @@ export default {
 }
 
 .navbar {
-    background-color: #0cb6b9;
+    background-color: #0F5944;
     padding: 10px;
     display: flex;
     justify-content: space-around;

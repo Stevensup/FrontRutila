@@ -295,10 +295,12 @@ export default {
 }
 
 .search-input {
+    background-color:#93c2c2;
     float: left;
     outline: none;
     border: none;
     font-weight: bold;
+    color: #ffffff;
 }
 
 .search-input::placeholder {

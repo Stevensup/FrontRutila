@@ -1,6 +1,6 @@
 <template>
     <footer class="footer" v-if="$route.name !== 'HelloWorld'">
-      <p>© 2024 Rutila</p>
+      <p>© 2024 Rutila Designe for Steven Useche Senior FrontEnd Developer</p>
     </footer>
   </template>
   
@@ -12,9 +12,9 @@
   
   <style scoped>
   .footer {
-    background-color: #0cb6b9;
-    color: #0b0505;
-    padding: 4px;
+    background-color: #0F5944;
+    color: #ffffff;
+    padding: 0.5px;
     text-align: center;
     font-size: 20px;
     bottom: 0;
