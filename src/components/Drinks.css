@@ -287,6 +287,12 @@ button[type="submit"]:hover {
 
 }
 
+ h1{
+        color: #F28A2E;
+        font-size: 3em;
+        text-transform: uppercase;
+    
+ }
 
 .flower-spinner,
 .flower-spinner * {
