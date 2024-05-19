@@ -10,99 +10,111 @@
             </div>
             Cargando...
         </div>
-        <div class="table-wrapper">
-            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Tipo</th>
-                        <th>Precio</th>
-                        <th>disponibilidad</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-if="filteredAndPaginatedDrinks.length === 0">
-                        <td colspan="6">
-                            <div class="no-results">
-                                <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                <span>Sin registros coincidentes</span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr v-else v-for="drink in filteredAndPaginatedDrinks" :key="`${drink.name}-${drink.price}`">
-                        <td>{{ drink.name }}</td>
-                        <td>{{ drink.idtype }}</td>
-                        <td>{{ drink.price }}</td>
-                        <td>{{ drink.availability }}</td>
-                        
-                        <td>
-                            <button class="delete" @click="deleteDrink(drink.id)">Eliminar</button>
-                            <button class="update"
-                                @click="selectedDrink = drink; showUpdateModal = true">Actualizar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="pagination">
-                <button @click="prevPage">Página anterior</button>
-                <span>Página {{ currentPage }} de {{ totalPages }}</span>
-                <button @click="nextPage">Página siguiente</button>
-            </div>
-            <div>
-                <button class="add" @click="showModal = true">Agregar Bebidas</button>
-            </div>
-            <div v-if="showModal" class="modal">
-                <div class="modal-content">
-                    <span @click="showModal = false" class="close">&times;</span>
-                    <form @submit.prevent="saveDrink" class="form">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" v-model="drink.name" required>
+        <div class="container">
+            <div class="table-wrapper">
+                <h1>Bebidas</h1>
+                <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Precio</th>
+                            <th>disponibilidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="filteredAndPaginatedDrinks.length === 0">
+                            <td colspan="6">
+                                <div class="no-results">
+                                    <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
+                                    <span>Sin registros coincidentes</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-else v-for="drink in filteredAndPaginatedDrinks" :key="`${drink.name}-${drink.price}`">
+                            <td>{{ drink.name }}</td>
+                            <td>{{ drink.idtype }}</td>
+                            <td>{{ drink.price }}</td>
+                            <td>{{ drink.availability }}</td>
 
-                        <label for="direccion">Dirección:</label>
-                        <input type="text" id="direccion" v-model="drink.idtype" required>
-
-                        <label for="telefono">Teléfono:</label>
-                        <input type="text" id="telefono" v-model="drink.price" required>
-
-                        <label for="horario_apertura">Horario Apertura:</label>
-                        <input type="time" id="horario_apertura" v-model="drink.availability" required>
-
-                        <button type="submit">Agregar Bebida</button>
-                    </form>
+                            <td>
+                                <button class="delete" @click="deleteDrink(drink.id)">Eliminar</button>
+                                <button class="update"
+                                    @click="selectedDrink = drink; showUpdateModal = true">Actualizar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button @click="prevPage">Página anterior</button>
+                    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+                    <button @click="nextPage">Página siguiente</button>
                 </div>
-            </div>
-            <div v-if="showUpdateModal" class="modal">
-                <div class="modal-content">
-                    <span @click="showUpdateModal = false" class="close">&times;</span>
-                    <form @submit.prevent="fupdateDrinks">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" v-model="selectedDrink.name" required>
+                <div>
+                    <button class="add" @click="showModal = true">Agregar Bebidas</button>
+                </div>
+                <div v-if="showModal" class="modal">
+                    <div class="modal-content">
+                        <span @click="showModal = false" class="close">&times;</span>
+                        <form @submit.prevent="saveDrink" class="form">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" v-model="drink.name" required>
 
-                        <label for="direccion">Tipo Bebida:</label>
-                        <input type="text" id="direccion" v-model="selectedDrink.idtype" required>
+                            <label for="direccion">Dirección:</label>
+                            <input type="text" id="direccion" v-model="drink.idtype" required>
 
-                        <label for="telefono">Precio:</label>
-                        <input type="text" id="telefono" v-model="selectedDrink.price" required>
+                            <label for="telefono">Teléfono:</label>
+                            <input type="text" id="telefono" v-model="drink.price" required>
 
-                        <label for="horario_apertura">Disponibilidad</label>
-                        <input type="time" id="horario_apertura" v-model="selectedDrink.availability" required>
+                            <label for="horario_apertura">Horario Apertura:</label>
+                            <input type="time" id="horario_apertura" v-model="drink.availability" required>
 
-                        <button type="submit">Actualizar Bebidas</button>
-                    </form>
+                            <button type="submit">Agregar Bebida</button>
+                        </form>
+                    </div>
+                </div>
+                <div v-if="showUpdateModal" class="modal">
+                    <div class="modal-content">
+                        <span @click="showUpdateModal = false" class="close">&times;</span>
+                        <form @submit.prevent="fupdateDrinks">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" v-model="selectedDrink.name" required>
+
+                            <label for="direccion">Tipo Bebida:</label>
+                            <input type="text" id="direccion" v-model="selectedDrink.idtype" required>
+
+                            <label for="telefono">Precio:</label>
+                            <input type="text" id="telefono" v-model="selectedDrink.price" required>
+
+                            <label for="horario_apertura">Disponibilidad</label>
+                            <input type="time" id="horario_apertura" v-model="selectedDrink.availability" required>
+
+                            <button type="submit">Actualizar Bebidas</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="table-wrapper">
+            <DrinksType />
+        </div>
+        </div>
 </template>
 
 
 
 <script>
 import axios from 'axios';
+import './Drinks.css';
+import DrinksType from './DrinksType.vue';
 export default {
     name: 'MyDrinks',
+    components: {
+        DrinksType
+    },
+
     data() {
         return {
             drinks: [],
@@ -181,7 +193,7 @@ export default {
                     }, 750);
                 });
         },
-        fupdateDrinks() {
+        updateDrinks() {
             axios.put(`http://localhost:8090/drink/actualizar/${this.selectedDrink.id}`, this.selectedDrink)
                 .then(response => {
                     console.log(response.data);
@@ -201,7 +213,6 @@ export default {
                     }, 750);
                 });
         }
-
 
     },
     mounted() {
@@ -227,6 +238,7 @@ export default {
 
             return filtered.slice(start, end);
         },
+
         totalPages() {
             const filtered = this.drinks.filter(drink => {
                 return Object.values(drink).some(val => {
@@ -248,411 +260,7 @@ export default {
             const end = start + this.itemsPerPage;
             return this.drinks.slice(start, end);
         }
-
     }
 
 };
 </script>
-
-<style scoped>
-.no-results {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.no-results span {
-    font-size: 2em;
-    /* Ajusta este valor para cambiar el tamaño del texto */
-}
-
-.search-input {
-    background-color: #ffffff;
-    outline: none;
-    border: none;
-    font-weight: bold;
-}
-
-.search-input::placeholder {
-    font-weight: bold;
-}
-
-
-body {
-    font-family: Helvetica Neue, Arial, sans-serif;
-    font-size: 14px;
-}
-
-table {
-    border: 2px solid #0F5944;
-    border-radius: 3px;
-    background-color: #fff;
-}
-
-th {
-    background-color: #0F5944;
-    color: rgba(255, 255, 255, 0.66);
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-td {
-    background-color: #f9f9f9;
-}
-
-th,
-td {
-    min-width: 120px;
-    padding: 10px 20px;
-}
-
-th.active {
-    color: #fff;
-}
-
-th.active .arrow {
-    opacity: 1;
-}
-
-.arrow {
-    display: inline-block;
-    vertical-align: middle;
-    width: 0;
-    height: 0;
-    margin-left: 5px;
-    opacity: 0.66;
-}
-
-.arrow.asc {
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-bottom: 4px solid #fff;
-}
-
-.arrow.dsc {
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 4px solid #fff;
-}
-
-
-.pagination {
-    display: flex;
-    justify-content: space-between;
-    padding: 1em 0;
-}
-
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-}
-
-.table-wrapper {
-    background-color: #fff;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-thead {
-    background-color: #f8f9fa;
-}
-
-th,
-td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-tr:hover {
-    background-color: #f5f5f5;
-}
-
-button {
-    background-color: #0F5944;
-    /* Green */
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    transition-duration: 0.4s;
-}
-
-button:hover {
-    background-color: #F28A2E;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-}
-
-label {
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-top: 5px;
-}
-
-button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button[type="submit"]:hover {
-    background-color: #2614a1;
-}
-
-.modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
-
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
-
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    /* Aumenta la opacidad para oscurecer el fondo */
-    color: white;
-    font-size: 48px;
-    /* Aumenta el tamaño de la fuente */
-}
-
-.delete {
-    background-color: #F28A2E;
-
-}
-
-.update {
-    background-color: #11BFBF;
-
-}
-
-.add {
-    background-color: #90BF2A;
-
-}
-
-
-.flower-spinner,
-.flower-spinner * {
-    box-sizing: border-box;
-}
-
-.flower-spinner {
-    height: 70px;
-    width: 70px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.flower-spinner .dots-container {
-    height: calc(70px / 7);
-    width: calc(70px / 7);
-}
-
-.flower-spinner .smaller-dot {
-    background: #0cb6b9;
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-    animation: flower-spinner-smaller-dot-animation 2.5s 0s infinite both;
-
-}
-
-.flower-spinner .bigger-dot {
-    background: #0cb6b9;
-    height: 100%;
-    width: 100%;
-    padding: 10%;
-    border-radius: 50%;
-    animation: flower-spinner-bigger-dot-animation 2.5s 0s infinite both;
-}
-
-@keyframes flower-spinner-bigger-dot-animation {
-
-    0%,
-    100% {
-        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px;
-    }
-
-    50% {
-        transform: rotate(180deg);
-    }
-
-    25%,
-    75% {
-        box-shadow: rgb(12, 182, 185) 26px 0px 0px,
-            rgb(12, 182, 185) -26px 0px 0px,
-            rgb(12, 182, 185) 0px 26px 0px,
-            rgb(12, 182, 185) 0px -26px 0px,
-            rgb(12, 182, 185) 19px -19px 0px,
-            rgb(12, 182, 185) 19px 19px 0px,
-            rgb(12, 182, 185) -19px -19px 0px,
-            rgb(12, 182, 185) -19px 19px 0px;
-    }
-
-    100% {
-        transform: rotate(360deg);
-        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px;
-    }
-}
-
-@keyframes flower-spinner-smaller-dot-animation {
-
-    0%,
-    100% {
-        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px;
-    }
-
-    25%,
-    75% {
-        box-shadow: rgb(12, 182, 185) 14px 0px 0px,
-            rgb(12, 182, 185) -14px 0px 0px,
-            rgb(12, 182, 185) 0px 14px 0px,
-            rgb(12, 182, 185) 0px -14px 0px,
-            rgb(12, 182, 185) 10px -10px 0px,
-            rgb(12, 182, 185) 10px 10px 0px,
-            rgb(12, 182, 185) -10px -10px 0px,
-            rgb(12, 182, 185) -10px 10px 0px;
-    }
-
-    100% {
-        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px;
-    }
-}
-</style>

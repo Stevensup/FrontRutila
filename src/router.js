@@ -5,6 +5,7 @@ import Customers from "./components/Customers.vue";
 import Users from "./components/Users.vue";
 import Welcome from "./components/Welcome.vue";
 import Drinks from "./components/Drinks.vue";
+import DrinksType from "./components/DrinksType.vue";
 import Invoices from "./components/Invoices.vue";
 import Orders from "./components/Orders.vue";
 
@@ -38,6 +39,11 @@ const routes = [
     path: "/Drinks",
     name: "Drinks",
     component: Drinks
+  },
+  {
+    path: "/DrinksType",
+    name: "DrinksType",
+    component: DrinksType
   },
   {
     path: "/Invoices",

@@ -1,0 +1,224 @@
+<template>
+    <div class="container">
+        <div v-if="isLoading" class="loader">
+            <div class="flower-spinner">
+                <div class="dots-container">
+                    <div class="bigger-dot">
+                        <div class="smaller-dot"></div>
+                    </div>
+                </div>
+            </div>
+            Cargando...
+        </div>
+        <div class="table-wrapper">
+        <h1>Tipos de Bebidas</h1>
+                <input class="search-input" type="text" v-model="searchType" placeholder="Buscar...">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Tipo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="filteredAndPaginatedDrinksTypes.length === 0">
+                            <td colspan="6">
+                                <div class="no-results">
+                                    <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
+                                    <span>Sin registros mka</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-else v-for="drinkType in filteredAndPaginatedDrinksTypes" :key="`${drinkType.id}-${drinkType.types}`">
+                            <td>{{ drinkType.id }}</td>
+                            <td>{{ drinkType.types }}</td>
+                            <td>
+                                <button class="delete" @click="deleteDrinkTypes(drinkType.id)">Eliminar</button>
+                                <button class="update" @click="selectedDrinkType = drinkType; showUpdateModalType = true">Actualizar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <button @click="prevPageType">Página anterior</button>
+                    <span>Página {{ currentPageType }} de {{ totalPagesType }}</span>
+                    <button @click="nextPageType">Página siguiente</button>
+                </div>
+                <div>
+                    <button class="add" @click="showModalType = true">Agregar Tipo Bebidas</button>
+                </div>
+                <div v-if="showModalType" class="modal">
+                    <div class="modal-content">
+                        <span @click="showModalType = false" class="close">&times;</span>
+                        <form @submit.prevent="saveDrinkType" class="form">
+                            <label for="types">Tipo:</label>
+                            <input type="text" id="types" v-model="drinkType.types" required>
+
+                            <button type="submit">Agregar Bebida</button>
+                        </form>
+                    </div>
+                </div>
+                <div v-if="showUpdateModalType" class="modal">
+                    <div class="modal-content">
+                        <span @click="showUpdateModalType = false" class="close">&times;</span>
+                        <form @submit.prevent="updateDrinksTypes">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" v-model="selectedDrinkType.id" required>
+
+                            <label for="direccion">Tipo Bebida:</label>
+                            <input type="text" id="direccion" v-model="selectedDrinkType.types" required>
+
+                            <button type="submit">Actualizar Bebidas</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</template>
+
+<script>
+import axios from 'axios';
+import './Drinks.css';
+export default {
+    name: 'MyDrinks',
+    data() {
+        return {
+            drinksTypes: [],
+            currentPageType: 1,
+            itemsPerPageType: 5,
+            isLoading: false,
+            showModalType: false,
+            showUpdateModalType: false,
+            selectedDrinkType: {
+                types: ''
+            },
+            searchType: '',
+            drinkType : {
+                types: ''
+            }
+        };
+    },
+    methods: {
+        nextPageType() {
+            if (this.currentPageType < this.totalPagesType) {
+                this.currentPageType++;
+            }
+        },
+        prevPageType() {
+            if (this.currentPageType > 1) {
+                this.currentPageType--;
+            }
+        },
+        fetchTypesDrinks() {
+            axios.get('http://localhost:8090/typeDrink/listar')
+                .then(response => { this.drinksTypes = response.data; })
+                .catch(error => { console.error(error); });
+        },
+        saveDrinkType() {
+            axios.post('http://localhost:8090/typeDrink/registrar', this.drinkType)
+                .then(response => {
+                    console.log(response.data);
+                    this.fetchTypesDrinks();
+                    this.drinkType = {
+                        types: ''
+                    };
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                .finally(() => {
+                    this.showModalType = false;
+                    this.isLoading = true;
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 750);
+                });
+        },
+        deleteDrinkTypes(id) {
+            axios.put(`http://localhost:8090/typeDrink/eliminar/${id}`)
+                .then(response => {
+                    console.log(response.data);
+                    this.fetchTypesDrinks();
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                .finally(() => {
+                    this.isLoading = true;
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 750);
+                });
+        },
+        updateDrinksTypes() {
+            axios.put(`http://localhost:8090/typeDrink/actualizar/${this.selectedDrinkType.id}`, this.selectedDrinkType)
+                .then(response => {
+                    console.log(response.data);
+
+                    const index = this.drinksTypes.findIndex(drinkType => drinkType.id === this.selectedDrinkType.id);
+                    this.drinksTypes.splice(index, 1, this.selectedDrinkType);
+
+                    this.showUpdateModalType = false;
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                .finally(() => {
+                    this.isLoading = true;
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 750);
+                });
+        }
+
+    },
+    mounted() {
+        this.fetchTypesDrinks();
+    },
+    computed: {
+        filteredAndPaginatedDrinksTypes() {
+            const filtered = this.drinksTypes.filter(drinkType => {
+                return Object.values(drinkType).some(val => {
+                    if (val === null || val === undefined) {
+                        return false;
+                    }
+
+                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.searchType.toLowerCase();
+
+                    return lowerCaseVal.includes(lowerCaseSearch);
+                });
+            });
+
+            const start = (this.currentPageType - 1) * this.itemsPerPageType;
+            const end = start + this.itemsPerPageType;
+
+            return filtered.slice(start, end);
+        },
+        paginatedDataTypes() {
+            const start = (this.currentPageType - 1) * this.itemsPerPageType;
+            const end = start + this.itemsPerPageType;
+            return this.drinksTypes.slice(start, end);
+        },
+        totalPagesType() {
+            const filtered = this.drinksTypes.filter(drinkType => {
+                return Object.values(drinkType).some(val => {
+                    if (val === null || val === undefined) {
+                        return false;
+                    }
+
+                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.searchType.toLowerCase();
+
+                    return lowerCaseVal.includes(lowerCaseSearch);
+                });
+            });
+
+            return Math.ceil(filtered.length / this.itemsPerPageType);
+        }
+    }
+
+};
+</script>
