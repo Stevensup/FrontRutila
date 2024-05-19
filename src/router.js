@@ -5,38 +5,44 @@ import Customers from "./components/Customers.vue";
 import Users from "./components/Users.vue";
 import Welcome from "./components/Welcome.vue"; 
 import Drinks from "./components/Drinks.vue";
+import Invoices from "./components/Invoices.vue";
 
 
 const routes = [
   {
     path: "/",
     name: "HelloWorld",
-    component: HelloWorld,
+    component: HelloWorld
   },
   {
     path: "/ListaDeBares",
     name: "ListaDeBares",
-    component: ListaDeBares,
+    component: ListaDeBares
   },
   {
     path: "/Customers",
     name: "Customers",
-    component: Customers,
+    component: Customers
   },
   {
     path: "/Users",
     name: "Users",
-    component: Users,
+    component: Users
   },
   {
     path: "/Welcome",
     name: "Welcome",
-    component: Welcome,
+    component: Welcome
   },
   {
     path: "/Drinks",
     name: "Drinks",
     component: Drinks
+  },
+  {
+    path: "/Invoices",
+    name: "Invoices",
+    component: Invoices
   }
 ];
 
