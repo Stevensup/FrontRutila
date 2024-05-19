@@ -40,8 +40,7 @@
                         <td>{{ bar.closingtime }}</td>
                         <td>
                             <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
-                            <button class="update"
-                                @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
+                            <button class="update" @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
                         </td>
                     </tr>
                 </tbody>

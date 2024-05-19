@@ -39,7 +39,7 @@
                         <td>
                             <button class="delete" @click="deleteUser(user.id)">Eliminar</button>
                             <button class="update" @click="selectedUser = user; showUpdateModal = true">Actualizar</button>
-                            <button class="updatePassword" @click="showUpdatePasswordModal = true">Actualizar Clave</button>
+                            <button class="updatePassword" @click="selectedUser = user.id; showUpdatePasswordModal = true">Actualizar Clave</button>
                         </td>
                     </tr>
                 </tbody>
@@ -57,7 +57,7 @@
                     <span class="close" @click="showModal = false">&times;</span>
                     <form @submit.prevent="saveUser" class="form">
                         <label for="role">Role:</label>
-                        <select id="id_role" v-model="user.id_role" required>
+                        <select id="id_role" v-model.number="user.id_role" required>
                             <option value="">Seleccione un rol</option>
                             <option value="1">Admin</option>
                             <option value="2">Empleado</option>
@@ -79,7 +79,7 @@
                     <span class="close" @click="showUpdateModal = false">&times;</span>
                     <form @submit.prevent="updateUser">
                         <label for="role">Role:</label>
-                        <select id="id_role" v-model="selectedUser.id_role" required>
+                        <select id="id_role" v-model.number="selectedUser.id_role" required>
                             <option value="">Seleccione un rol</option>
                             <option value="1">Admin</option>
                             <option value="2">Empleado</option>
@@ -112,6 +112,7 @@
 
 <script>
 import axios from 'axios';
+import bcrypt from 'bcryptjs';
 export default {
     name: 'My-Users',
     data() {
@@ -128,7 +129,7 @@ export default {
                 phone: '',
                 email: '',
                 hash_password: '',
-                id_role: 2
+                id_role: ''
             },
             search: '',
             user: {
@@ -136,7 +137,7 @@ export default {
                 email: '',
                 phone: '',
                 hash_password: '',
-                id_role: 2
+                id_role: ''
             },
         }
     },
@@ -157,10 +158,11 @@ export default {
                 .catch(error => { console.error(error); });
         },
         saveUser() {
+            const salt = bcrypt.genSaltSync(10);
+            this.user.hash_password = bcrypt.hashSync(this.user.hash_password, salt);
             console.log(this.user);
-            axios.post('https://localhost:8090/user/registrar', this.user)
+            axios.post('http://localhost:8090/user/registrar', this.user)
                 .then(response => {
-
                     console.log(response.data);
                     this.fetchUsers();
                     this.user = {
@@ -169,7 +171,6 @@ export default {
                         email: '',
                         hash_password: '',
                         id_role: null
-
                     };
                 })
                 .catch(error => {
@@ -201,7 +202,7 @@ export default {
                 });
         },
         updateUser() {
-            axios.put(`https://localhost:8090/user/actualizar/${this.selectedUser.id}`, this.selectedUser)
+            axios.put(`http://localhost:8090/user/actualizar/${this.selectedUser.id}`, this.selectedUser)
                 .then(response => {
                     console.log(response.data);
 
@@ -223,7 +224,11 @@ export default {
                 });
         },
         updatePassword(id) {
-            axios.put(`http://localhost:8090/user/actualizar/clave/${id}`, this.updatePassword)
+            const salt = bcrypt.genSaltSync(10);
+            this.updatePassword.hash_password = bcrypt.hashSync(this.updatePassword.hash_password, salt);
+            console.log(this.updatePassword.hash_password);
+            console.log(this.selectedUser.id);
+            axios.put(`http://localhost:8090/user/actualizar/${id}`, this.updatePassword)
                 .then(response => {
                     console.log(response.data);
                     this.fetchUsers();
