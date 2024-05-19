@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import bcrypt from 'bcryptjs';
+import axios from 'axios';
 export default {
   name: 'HelloWord',
   data() {
@@ -32,13 +32,22 @@ export default {
   },
   methods: {
     async login() {
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(this.user.userPassword, saltRounds);
-      // Ahora puedes utilizar `hashedPassword` para las operaciones de autenticación
-      console.log({ ...this.user, userPassword: hashedPassword });
-      this.$router.push('/Welcome');
+        try {
+          const response = await axios.get(`http://localhost:8090/login?email=${encodeURIComponent(this.user.email)}&userPassword=${encodeURIComponent(this.user.userPassword)}`);
+            console.log({ ...this.user, userPassword: '' });
+
+            if (response.data.estado === 'autenticado') {
+                this.$router.push('/Welcome');
+            } else {
+                // Manejar el caso en que el usuario no esté autenticado
+                console.log('Usuario no autenticado');
+            }
+        } catch (error) {
+            // Manejar el error
+            console.log(error);
+        }
     }
-  }
+}
 }
 </script>
 

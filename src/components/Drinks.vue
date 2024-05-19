@@ -63,7 +63,7 @@
                             <input type="text" id="nombre" v-model="drink.name" required>
 
                             <label for="tipoBebida">Bebida:</label>
-                            <input type="text" id="tipoBebida" v-model="drink.idtype" required>
+                            <input type="number" id="tipoBebida" v-model="drink.idtype" required>
 
                             <label for="precio">Precio:</label>
                             <input type="text" id="precio" v-model="drink.price" required>
@@ -83,7 +83,7 @@
                             <input type="text" id="nombre" v-model="selectedDrink.name" required>
 
                             <label for="bebida">Tipo Bebida:</label>
-                            <input type="text" id="bebida" v-model="drink.types " required>
+                            <input type="number" id="bebida" v-model="drink.types " required>
                             <!-- <input type="text" id="bebida" v-model="selectedDrink.tipo" required> -->
 
                             <label for="telefono">Precio:</label>
