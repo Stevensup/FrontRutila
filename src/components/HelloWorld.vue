@@ -14,12 +14,14 @@
 
         <button class="submit" type="submit">Iniciar sesión</button>
       </form>
+      <p v-if="error" class="error-message">{{ error }}</p>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import swal from 'sweetalert';
 export default {
   name: 'HelloWord',
   data() {
@@ -27,7 +29,8 @@ export default {
       user: {
         email: '',
         userPassword: ''
-      }
+      },
+      error: null
     };
   },
   methods: {
@@ -38,13 +41,17 @@ export default {
 
             if (response.data.estado === 'autenticado') {
                 this.$router.push('/Welcome');
-            } else {
+                swal("Usuario autenticado", "El usuario está autenticado", "success");
+            } else if (response.data.estado === 'bloqueado' || response.data.estado === 'fallido'){
                 // Manejar el caso en que el usuario no esté autenticado
                 console.log('Usuario no autenticado');
+                throw new Error('Cagada');                
             }
         } catch (error) {
             // Manejar el error
             console.log(error);
+            this.error = 'Cagada';
+            swal("Error al iniciar sesión", "Cagada", "error");
         }
     }
 }
