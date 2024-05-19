@@ -1,169 +1,188 @@
 <template>
-  <div class="container">
-      <div v-if="isLoading" class="loader">
-          <div class="flower-spinner">
-              <div class="dots-container">
-                  <div class="bigger-dot">
-                      <div class="smaller-dot"></div>
-                  </div>
-              </div>
-          </div>
-          Cargando...
-      </div>
-      <div class="table-wrapper">
-          <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
-          <table>
-              <thead>
-                  <tr>
-                      <th>Name</th>
-                      <th>Phone</th>
-                      <th>Email</th>
-                      <th>Actions</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr v-if="filteredAndPaginatedUser.length === 0">
-                      <td colspan="6">
-                          <div class="no-results">
-                              <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                              <span>Sin registros coincidentes</span>
-                          </div>
-                      </td>
-                  </tr>
-                  <tr v-else v-for="user in filteredAndPaginatedUser" :key="`${user.name}-${user.phone}`">
-                      <td>{{ user.name }}</td>
-                      <td>{{ user.phone }}</td>
-                      <td>{{ user.email }}</td>
-                      <td>
-                          <button class="delete" @click="deleteUser(user.id)">Eliminar</button>
-                          <button class="update"
-                              @click="selectedUser = user; showUpdateModal = true">Actualizar</button>
-                          <!-- <button class="updatePassword" @click="updatePassword(user.id) = user; showUpdatePasswordModal = true">Actualizar Contraseña</button> -->
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-          <div class="pagination">
-              <button @click="prevPage">Página anterior</button>
-              <span>Página {{ currentPage }} de {{ totalPages }}</span>
-              <button @click="nextPage">Página siguiente</button>
-          </div>
-          <div>
-              <button class="add" @click="showModal = true">Agregar un Usuario</button>
-          </div>
-          <div v-if="showModal" class="modal">
-              <div class="modal-content">
-                  <span class="close" @click="showModal = false">&times;</span>
-                  <form @submit.prevent="saveUser" class="form">
-                    <label for="role">Role:</label>
-                    <select id="id_role" v-model="newUser.id_role" required>
-                      <option value="">Seleccione un rol</option>
-                      <option value="1">Admin</option>
-                      <option value="2">Empleado</option>
-                    </select>
-                      <label for="name">Name:</label>
-                      <input type="text" id="name" v-model="newUser.name" required>
-                      <label for="phone">Phone:</label>
-                      <input type="text" id="phone" v-model="newUser.phone" required>
-                      <label for="email">Email:</label>
-                      <input type="email" id="email" v-model="newUser.email" required>
-                      <label for="hash_password">Password:</label>
-                      <input type="password" id="hash_password" v-model="newUser.hash_password" required>
-                      <button type="submit">Agregar Cliente</button>
-                  </form>
-              </div>
-          </div>
-          <div v-if="showUpdateModal" class="modal">
-              <div class="modal-content">
-                  <span class="close" @click="showUpdateModal = false">&times;</span>
-                  <form @submit.prevent="updateUser">
-                      <label for="name">Name:</label>
-                      <input type="text" id="name" v-model="selectedUser.name" required>
-                      <label for="phone">Phone:</label>
-                      <input type="text" id="phone" v-model="selectedUser.phone" required>
-                      <label for="email">Email:</label>
-                      <input type="email" id="email" v-model="selectedUser.email" required>
-                      <label for="hash_password">Password:</label>
-                      <input type="password" id="hash_password" v-model="newUser.hash_password" required>
-                      <button type="submit">Actualizar Cliente</button>
-                  </form>
-              </div>
-          </div>
-      </div>
-  </div>
+    <div class="container">
+        <div v-if="isLoading" class="loader">
+            <div class="flower-spinner">
+                <div class="dots-container">
+                    <div class="bigger-dot">
+                        <div class="smaller-dot"></div>
+                    </div>
+                </div>
+            </div>
+            Cargando...
+        </div>
+        <div class="table-wrapper">
+            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-if="filteredAndPaginatedUser.length === 0">
+                        <td colspan="6">
+                            <div class="no-results">
+                                <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
+                                <span>Sin registros coincidentes</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-else v-for="user in filteredAndPaginatedUser" :key="`${user.name}-${user.phone}`">
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.id_role === 1 ? 'Admin' : 'Empleado' }}</td>
+                        <td>
+                            <button class="delete" @click="deleteUser(user.id)">Eliminar</button>
+                            <button class="update" @click="selectedUser = user; showUpdateModal = true">Actualizar</button>
+                            <button class="updatePassword" @click="showUpdatePasswordModal = true">Actualizar
+                                Clave</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <button @click="prevPage">Página anterior</button>
+                <span>Página {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage">Página siguiente</button>
+            </div>
+            <div>
+                <button class="add" @click="showModal = true">Agregar un Usuario</button>
+            </div>
+            <div v-if="showModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" @click="showModal = false">&times;</span>
+                    <form @submit.prevent="saveUser" class="form">
+                        <label for="role">Role:</label>
+                        <select id="id_role" v-model="user.id_role" required>
+                            <option value="">Seleccione un rol</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Empleado</option>
+                        </select>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" v-model="user.name" required>
+                        <label for="phone">Phone:</label>
+                        <input type="text" id="phone" v-model="user.phone" required>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" v-model="user.email" required>
+                        <label for="hash_password">Password:</label>
+                        <input type="password" id="hash_password" v-model="user.hash_password" required>
+                        <button type="submit">Agregar Cliente</button>
+                    </form>
+                </div>
+            </div>
+            <div v-if="showUpdateModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" @click="showUpdateModal = false">&times;</span>
+                    <form @submit.prevent="updateUser">
+                        <label for="role">Role:</label>
+                        <select id="id_role" v-model="selectedUser.id_role" required>
+                            <option value="">Seleccione un rol</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Empleado</option>
+                        </select>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" v-model="selectedUser.name" required>
+                        <label for="phone">Phone:</label>
+                        <input type="text" id="phone" v-model="selectedUser.phone" required>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" v-model="selectedUser.email" required>
+                        <label for="hash_password">Password:</label>
+                        <input type="password" id="hash_password" v-model="selectedUser.hash_password" required>
+                        <button type="submit">Actualizar Cliente</button>
+                    </form>
+                </div>
+            </div>
+            <div v-if="showUpdatePasswordModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" @click="showUpdatePasswordModal = false">&times;</span>
+                    <form @submit.prevent="updatePassword">
+                        <label for="hash_password">Password:</label>
+                        <input type="password" id="hash_password" v-model="updatePassword.hash_password" required>
+                        <button type="submit">Actualizar Clave</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import axios from 'axios';
 export default {
-  name: 'My-Users',
-  data() {
-    return {
-      users: [],
-      currentPage: 1,
-      itemsPerPage: 5,
-      isLoading: false,
-      showModal: false,
-      showUpdateModal: false,
-      selectedUser: {
-        name: '',
-        phone: '',
-        email: '',
-        hash_password: '',
-        id_role: 10
-      },
-      search: '',
-      user: {
-        name: '',
-        email: '',
-        phone: '',
-        id_role: 10,
-        hash_password: ''
-      },
-    }
-  },
-  methods:{
-    nextPage(){
-      if(this.currentPage < this.totalPages){
-        this.currentPage++;
-      }
+    name: 'My-Users',
+    data() {
+        return {
+            users: [],
+            currentPage: 1,
+            itemsPerPage: 5,
+            isLoading: false,
+            showModal: false,
+            showUpdateModal: false,
+            showUpdatePasswordModal: false,
+            selectedUser: {
+                name: '',
+                phone: '',
+                email: '',
+                hash_password: '',
+                id_role: null
+            },
+            search: '',
+            user: {
+                name: '',
+                email: '',
+                phone: '',
+                hash_password: '',
+                id_role: null
+            },
+        }
     },
-    prevPage(){
-      if(this.currentPage > 1){
-        this.currentPage--;
-      }
-    },
-    fetchUsers(){
-      axios.get('http://localhost:8090/user/listar')
-      .then(response => { this.users = response.data; })
-      .catch(error => { console.error(error); });
-    },
-    saveUser(){
-      axios.post('https://localhost:8090/user/registrar', this.newUser)
-      .then(response => {
-        console.log(response.data);
-        this.fetchUsers();
-        this.newUser = {
-          name: '',
-          phone: '',
-          email: '',
-          hash_password: '',
-          id_role: 10
-          
-        };
-      })
-      .catch(error => {
-         console.error(error); 
-        })
-      .finally(() => {
+    methods: {
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
+        fetchUsers() {
+            axios.get('http://localhost:8090/user/listar')
+                .then(response => { this.users = response.data; })
+                .catch(error => { console.error(error); });
+        },
+        saveUser() {
+            axios.post('https://localhost:8090/user/registrar', this.newUser)
+                .then(response => {
+                    console.log(response.data);
+                    this.fetchUsers();
+                    this.newUser = {
+                        name: '',
+                        phone: '',
+                        email: '',
+                        hash_password: '',
+                        id_role: 10
+
+                    };
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                .finally(() => {
                     this.showModal = false;
                     this.isLoading = true;
                     setTimeout(() => {
                         this.isLoading = false;
                     }, 750);
                 });
-    },
-    deleteUser(id) {
+        },
+        deleteUser(id) {
             console.log(id);
             axios.put(`http://localhost:8090/user/eliminar/${id}`)
                 .then(response => {
@@ -180,35 +199,52 @@ export default {
                     }, 750);
                 });
         },
-    updateUser(){
-      axios.put(`https://localhost:8090/user/actualizar/${this.selectedUser.id}`, this.selectedUser)
-      .then(response => {
-        console.log(response.data);
+        updateUser() {
+            axios.put(`https://localhost:8090/user/actualizar/${this.selectedUser.id}`, this.selectedUser)
+                .then(response => {
+                    console.log(response.data);
 
-        const index = this.users.findIndex(user => user.id === this.selectedUser.id);
+                    const index = this.users.findIndex(user => user.id === this.selectedUser.id);
                     this.users.splice(index, 1, this.selectedUser);
-                    
-        this.showUpdateModal = false;
 
-      })
-      .catch(error => { 
-        console.error(error); 
-      })
-      .finally(() => {
+                    this.showUpdateModal = false;
+
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                .finally(() => {
                     this.showUpdateModal = false;
                     this.isLoading = true;
                     setTimeout(() => {
                         this.isLoading = false;
                     }, 750);
                 });
-    }
+        },
+        updatePassword(id) {
+            axios.put(`http://localhost:8090/user/actualizar/clave/${id}`, this.updatePassword)
+                .then(response => {
+                    console.log(response.data);
+                    this.fetchUsers();
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                .finally(() => {
+                    this.showUpdatePasswordModal = false;
+                    this.isLoading = true;
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 750);
+                });
+        }
 
-  },
+    },
     mounted() {
         this.fetchUsers();
     },
-  computed: {
-    filteredAndPaginatedUser() {
+    computed: {
+        filteredAndPaginatedUser() {
             const filtered = this.users.filter(user => {
                 return Object.values(user).some(val => {
                     if (val === null || val === undefined) {
@@ -243,8 +279,8 @@ export default {
 
             return Math.ceil(filtered.length / this.itemsPerPage);
         }
-  },
-  
+    },
+
 }
 
 </script>
