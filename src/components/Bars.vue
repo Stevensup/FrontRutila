@@ -50,7 +50,6 @@
                 <button @click="prevPage">Página anterior</button>
                 <span>Página {{ currentPage }} de {{ totalPages }}</span>
                 <button @click="nextPage">Página siguiente</button>
-
             </div>
             <div>
                 <button class="add" @click="showModal = true">Agregar Bar</button>
@@ -74,7 +73,7 @@
                         <label for="horario_cierre">Horario Cierre:</label>
                         <input type="time" id="horario_cierre" v-model="bar.closingtime" required>
 
-                        <button type="submit">Guardar</button>
+                        <button type="submit">Agregar Bar</button>
                     </form>
                 </div>
             </div>
@@ -92,12 +91,12 @@
                         <input type="text" id="telefono" v-model="selectedBar.phone" required>
 
                         <label for="horario_apertura">Horario Apertura:</label>
-                        <input type="time" id="horario_apertura" v-model="bar.entrytime" required>
+                        <input type="time" id="horario_apertura" v-model="selectedBar.entrytime" required>
 
                         <label for="horario_cierre">Horario Cierre:</label>
-                        <input type="time" id="horario_cierre" v-model="bar.closingtime" required>
+                        <input type="time" id="horario_cierre" v-model="selectedBar.closingtime" required>
 
-                        <button type="submit">Actualizar</button>
+                        <button type="submit">Actualizar Bar</button>
                     </form>
                 </div>
             </div>
@@ -115,7 +114,7 @@ export default {
         return {
             bars: [],
             currentPage: 1,
-            itemsPerPage: 6,
+            itemsPerPage: 5,
             isLoading: false,
             showModal: false,
             showUpdateModal: false,
@@ -148,22 +147,16 @@ export default {
                 this.currentPage--;
             }
         },
-        // Método para obtener la lista de bares desde el servidor
         fetchBars() {
-            // Aquí va la lógica para hacer la petición HTTP y obtener los bares
             axios.get('http://localhost:8090/pubs/listar')
                 .then(response => { this.bars = response.data; })
                 .catch(error => { console.error(error); });
         },
-        // Método para guardar un nuevo bar en el servidor
         saveBar() {
-            axios.post('http://localhost:8090/pubs/guardarbar', this.bar)
+            axios.post('http://localhost:8090/pubs/registrar', this.bar)
                 .then(response => {
-                    // Aquí puedes manejar la respuesta del servidor después de guardar el bar
                     console.log(response.data);
-                    // Actualizar la lista de bares después de guardar uno nuevo
                     this.fetchBars();
-                    // Reiniciar el formulario
                     this.bar = {
                         nombre: '',
                         direccion: '',
@@ -183,13 +176,10 @@ export default {
                     }, 750);
                 });
         },
-        // Método para eliminar un bar en el servidor
         deleteBar(id) {
             axios.put(`http://localhost:8090/pubs/eliminar/${id}`)
                 .then(response => {
-                    // Aquí puedes manejar la respuesta del servidor después de eliminar el bar
                     console.log(response.data);
-                    // Actualizar la lista de bares después de eliminar uno
                     this.fetchBars();
                 })
                 .catch(error => {
@@ -204,16 +194,13 @@ export default {
         },
         // Método para editar un bar
         updateBar() {
-            axios.put(`http://localhost:8090/pubs/${this.selectedBar.id}`, this.selectedBar)
+            axios.put(`http://localhost:8090/pubs/actualizar/${this.selectedBar.id}`, this.selectedBar)
                 .then(response => {
-                    // Aquí puedes manejar la respuesta del servidor después de editar el bar
                     console.log(response.data);
 
-                    // Actualiza la lista de bares con los datos actualizados del bar
                     const index = this.bars.findIndex(bar => bar.id === this.selectedBar.id);
                     this.bars.splice(index, 1, this.selectedBar);
 
-                    // Cierra el modal de actualización
                     this.showUpdateModal = false;
                 })
                 .catch(error => {
@@ -230,7 +217,6 @@ export default {
 
     },
     mounted() {
-        // Llamar al método fetchBars al cargar el componente
         this.fetchBars();
     },
     computed: {

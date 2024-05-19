@@ -41,7 +41,6 @@
                             <button class="delete" @click="deleteCustomer(customer.id)">Eliminar</button>
                             <button class="update"
                                 @click="selectedCustomer = customer; showUpdateModal = true">Actualizar</button>
-                            <!-- <button class="updatePassword" @click="updatePassword(customer.id) = customer; showUpdatePasswordModal = true">Actualizar Contraseña</button> -->
                         </td>
                     </tr>
                 </tbody>
@@ -117,7 +116,6 @@ export default {
                 phone: '',
                 email: ''
             },
-
         }
     },
     methods: {
@@ -192,7 +190,6 @@ export default {
                     }, 750);
                 });
         }
-
 
     },
     mounted() {
