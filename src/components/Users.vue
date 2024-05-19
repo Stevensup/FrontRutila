@@ -39,8 +39,7 @@
                         <td>
                             <button class="delete" @click="deleteUser(user.id)">Eliminar</button>
                             <button class="update" @click="selectedUser = user; showUpdateModal = true">Actualizar</button>
-                            <button class="updatePassword" @click="showUpdatePasswordModal = true">Actualizar
-                                Clave</button>
+                            <button class="updatePassword" @click="showUpdatePasswordModal = true">Actualizar Clave</button>
                         </td>
                     </tr>
                 </tbody>
@@ -129,7 +128,7 @@ export default {
                 phone: '',
                 email: '',
                 hash_password: '',
-                id_role: null
+                id_role: 2
             },
             search: '',
             user: {
@@ -137,7 +136,7 @@ export default {
                 email: '',
                 phone: '',
                 hash_password: '',
-                id_role: null
+                id_role: 2
             },
         }
     },
@@ -158,16 +157,18 @@ export default {
                 .catch(error => { console.error(error); });
         },
         saveUser() {
-            axios.post('https://localhost:8090/user/registrar', this.newUser)
+            console.log(this.user);
+            axios.post('https://localhost:8090/user/registrar', this.user)
                 .then(response => {
+
                     console.log(response.data);
                     this.fetchUsers();
-                    this.newUser = {
+                    this.user = {
                         name: '',
                         phone: '',
                         email: '',
                         hash_password: '',
-                        id_role: 10
+                        id_role: null
 
                     };
                 })
@@ -282,7 +283,6 @@ export default {
     },
 
 }
-
 </script>
 
 
@@ -567,6 +567,12 @@ button[type="submit"]:hover {
 
 .add {
     background-color: #90BF2A;
+
+}
+
+.updatePassword {
+    background-color: #389b1d;
+    color: white;
 
 }
 
