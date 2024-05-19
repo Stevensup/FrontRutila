@@ -5,14 +5,23 @@
                 <img width="100" height="50" src="../assets/RutilaIcon.png" alt="Rutila Icon" class="nav-icon">
             </div>
             <div class="navbar-right">
-                <button class="nav-button" @click="$router.push('/ListaDeBares')">Bares</button>
-                <button class="nav-button" @click="$router.push('/Customers')">Customers</button>
-                <button class="nav-button" @click="$router.push('/Users')">Users</button>
-                <button class="nav-button" @click="$router.push('/Drinks')">Drinks</button>
-                <button class="nav-button" @click="$router.push('/Orders')">Orders</button>
-                <button class="nav-button" @click="$router.push('/Invoices')">Invoices</button>
+                <button class="nav-button" @click="navigate('/ListaDeBares')">Bares</button>
+                <button class="nav-button" @click="navigate('/Customers')">Customers</button>
+                <button class="nav-button" @click="navigate('/Users')">Users</button>
+                <button class="nav-button" @click="navigate('/Drinks')">Drinks</button>
+                <button class="nav-button" @click="navigate('/Orders')">Orders</button>
+                <button class="nav-button" @click="navigate('/Invoices')">Invoices</button>
                 <br>
-                <button class="nav-button-logaut" @click="$router.push('/')">Logaut</button>
+                <button class="nav-button-logaut" @click="navigate('/')">Logaut</button>
+            </div>
+            <div v-if="isLoading" class="loader">
+                <div class="flower-spinner">
+                    <div class="dots-container">
+                        <div class="bigger-dot">
+                            <div class="smaller-dot"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
     </div>
@@ -20,8 +29,21 @@
 
 <script>
 export default {
-    name: 'MyNavbar'
-
+    name: 'MyNavbar',
+    data() {
+        return {
+            isLoading: false
+        }
+    },
+    methods: {
+        navigate(route) {
+            this.isLoading = true;
+            setTimeout(() => {
+                this.$router.push(route);
+                this.isLoading = false;
+            }, 350); // Cambia este valor para ajustar la duración de la animación
+        }
+    }
 }
 </script>
 
@@ -84,5 +106,124 @@ export default {
     /* Cambia el color de fondo a rojo cuando se pasa el mouse por encima */
     border: 2px solid red;
     /* Cambia el color del borde a rojo cuando se pasa el mouse por encima */
+}
+
+
+.flower-spinner,
+.flower-spinner * {
+    box-sizing: border-box;
+}
+
+.flower-spinner {
+    height: 70px;
+    width: 70px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.flower-spinner .dots-container {
+    height: calc(70px / 7);
+    width: calc(70px / 7);
+}
+
+.flower-spinner .smaller-dot {
+    background: #0cb6b9;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    animation: flower-spinner-smaller-dot-animation 2.5s 0s infinite both;
+
+}
+
+.flower-spinner .bigger-dot {
+    background: #0cb6b9;
+    height: 100%;
+    width: 100%;
+    padding: 10%;
+    border-radius: 50%;
+    animation: flower-spinner-bigger-dot-animation 2.5s 0s infinite both;
+}
+
+@keyframes flower-spinner-bigger-dot-animation {
+
+    0%,
+    100% {
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    25%,
+    75% {
+        box-shadow: rgb(12, 182, 185) 26px 0px 0px,
+            rgb(12, 182, 185) -26px 0px 0px,
+            rgb(12, 182, 185) 0px 26px 0px,
+            rgb(12, 182, 185) 0px -26px 0px,
+            rgb(12, 182, 185) 19px -19px 0px,
+            rgb(12, 182, 185) 19px 19px 0px,
+            rgb(12, 182, 185) -19px -19px 0px,
+            rgb(12, 182, 185) -19px 19px 0px;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
+    }
+}
+
+@keyframes flower-spinner-smaller-dot-animation {
+
+    0%,
+    100% {
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
+    }
+
+    25%,
+    75% {
+        box-shadow: rgb(12, 182, 185) 14px 0px 0px,
+            rgb(12, 182, 185) -14px 0px 0px,
+            rgb(12, 182, 185) 0px 14px 0px,
+            rgb(12, 182, 185) 0px -14px 0px,
+            rgb(12, 182, 185) 10px -10px 0px,
+            rgb(12, 182, 185) 10px 10px 0px,
+            rgb(12, 182, 185) -10px -10px 0px,
+            rgb(12, 182, 185) -10px 10px 0px;
+    }
+
+    100% {
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
+    }
 }
 </style>
