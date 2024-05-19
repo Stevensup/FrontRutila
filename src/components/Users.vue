@@ -192,7 +192,7 @@ export default {
                 });
         },
         updateUser() {
-            const salt = bcrypt.genSaltSync(10);
+            const salt = bcrypt.genSaltSync(12);
             this.selectedUser.hash_password = bcrypt.hashSync(this.selectedUser.hash_password, salt);
             axios.put(`http://localhost:8090/user/actualizar/${this.selectedUser.id}`, this.selectedUser)
                 .then(response => {
