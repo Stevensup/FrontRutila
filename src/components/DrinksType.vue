@@ -64,9 +64,7 @@
                     <div class="modal-content">
                         <span @click="showUpdateModalType = false" class="close">&times;</span>
                         <form @submit.prevent="updateDrinksTypes">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" v-model="selectedDrinkType.id" required>
-
+    
                             <label for="direccion">Tipo Bebida:</label>
                             <input type="text" id="direccion" v-model="selectedDrinkType.types" required>
 
