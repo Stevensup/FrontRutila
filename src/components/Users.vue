@@ -39,7 +39,6 @@
                         <td>
                             <button class="delete" @click="deleteUser(user.id)">Eliminar</button>
                             <button class="update" @click="selectedUser = user; showUpdateModal = true">Actualizar</button>
-                            <button class="updatePassword" @click="selectedUser = user.id; showUpdatePasswordModal = true">Actualizar Clave</button>
                         </td>
                     </tr>
                 </tbody>
@@ -93,16 +92,6 @@
                         <label for="hash_password">Password:</label>
                         <input type="password" id="hash_password" v-model="selectedUser.hash_password" required>
                         <button type="submit">Actualizar Cliente</button>
-                    </form>
-                </div>
-            </div>
-            <div v-if="showUpdatePasswordModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" @click="showUpdatePasswordModal = false">&times;</span>
-                    <form @submit.prevent="updatePassword">
-                        <label for="hash_password">Password:</label>
-                        <input type="password" id="hash_password" v-model="updatePassword.hash_password" required>
-                        <button type="submit">Actualizar Clave</button>
                     </form>
                 </div>
             </div>
@@ -202,6 +191,8 @@ export default {
                 });
         },
         updateUser() {
+            const salt = bcrypt.genSaltSync(10);
+            this.selectedUser.hash_password = bcrypt.hashSync(this.selectedUser.hash_password, salt);
             axios.put(`http://localhost:8090/user/actualizar/${this.selectedUser.id}`, this.selectedUser)
                 .then(response => {
                     console.log(response.data);
@@ -222,29 +213,7 @@ export default {
                         this.isLoading = false;
                     }, 750);
                 });
-        },
-        updatePassword(id) {
-            const salt = bcrypt.genSaltSync(10);
-            this.updatePassword.hash_password = bcrypt.hashSync(this.updatePassword.hash_password, salt);
-            console.log(this.updatePassword.hash_password);
-            console.log(this.selectedUser.id);
-            axios.put(`http://localhost:8090/user/actualizar/${id}`, this.updatePassword)
-                .then(response => {
-                    console.log(response.data);
-                    this.fetchUsers();
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    this.showUpdatePasswordModal = false;
-                    this.isLoading = true;
-                    setTimeout(() => {
-                        this.isLoading = false;
-                    }, 750);
-                });
         }
-
     },
     mounted() {
         this.fetchUsers();
