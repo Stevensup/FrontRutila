@@ -16,15 +16,14 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Dirección</th>
-                        <th>Teléfono</th>
-                        <th>Horario Apertura</th>
-                        <th>Horario Cierre</th>
+                        <th>Tipo</th>
+                        <th>Precio</th>
+                        <th>disponibilidad</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-if="filteredAndPaginatedBars.length === 0">
+                    <tr v-if="filteredAndPaginatedDrinks.length === 0">
                         <td colspan="6">
                             <div class="no-results">
                                 <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
@@ -32,16 +31,16 @@
                             </div>
                         </td>
                     </tr>
-                    <tr v-else v-for="bar in filteredAndPaginatedBars" :key="`${bar.name}-${bar.phone}`">
-                        <td>{{ bar.name }}</td>
-                        <td>{{ bar.location }}</td>
-                        <td>{{ bar.phone }}</td>
-                        <td>{{ bar.entrytime }}</td>
-                        <td>{{ bar.closingtime }}</td>
+                    <tr v-else v-for="drink in filteredAndPaginatedDrinks" :key="`${drink.name}-${drink.price}`">
+                        <td>{{ drink.name }}</td>
+                        <td>{{ drink.idtype }}</td>
+                        <td>{{ drink.price }}</td>
+                        <td>{{ drink.availability }}</td>
+                        
                         <td>
-                            <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
+                            <button class="delete" @click="deleteDrink(drink.id)">Eliminar</button>
                             <button class="update"
-                                @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
+                                @click="selectedDrink = drink; showUpdateModal = true">Actualizar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -52,51 +51,45 @@
                 <button @click="nextPage">Página siguiente</button>
             </div>
             <div>
-                <button class="add" @click="showModal = true">Agregar Bar</button>
+                <button class="add" @click="showModal = true">Agregar Bebidas</button>
             </div>
             <div v-if="showModal" class="modal">
                 <div class="modal-content">
                     <span @click="showModal = false" class="close">&times;</span>
-                    <form @submit.prevent="saveBar" class="form">
+                    <form @submit.prevent="saveDrink" class="form">
                         <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" v-model="bar.name" required>
+                        <input type="text" id="nombre" v-model="drink.name" required>
 
                         <label for="direccion">Dirección:</label>
-                        <input type="text" id="direccion" v-model="bar.location" required>
+                        <input type="text" id="direccion" v-model="drink.idtype" required>
 
                         <label for="telefono">Teléfono:</label>
-                        <input type="text" id="telefono" v-model="bar.phone" required>
+                        <input type="text" id="telefono" v-model="drink.price" required>
 
                         <label for="horario_apertura">Horario Apertura:</label>
-                        <input type="time" id="horario_apertura" v-model="bar.entrytime" required>
+                        <input type="time" id="horario_apertura" v-model="drink.availability" required>
 
-                        <label for="horario_cierre">Horario Cierre:</label>
-                        <input type="time" id="horario_cierre" v-model="bar.closingtime" required>
-
-                        <button type="submit">Agregar Bar</button>
+                        <button type="submit">Agregar Bebida</button>
                     </form>
                 </div>
             </div>
             <div v-if="showUpdateModal" class="modal">
                 <div class="modal-content">
                     <span @click="showUpdateModal = false" class="close">&times;</span>
-                    <form @submit.prevent="updateBar">
+                    <form @submit.prevent="fupdateDrinks">
                         <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" v-model="selectedBar.name" required>
+                        <input type="text" id="nombre" v-model="selectedDrink.name" required>
 
-                        <label for="direccion">Dirección:</label>
-                        <input type="text" id="direccion" v-model="selectedBar.location" required>
+                        <label for="direccion">Tipo Bebida:</label>
+                        <input type="text" id="direccion" v-model="selectedDrink.idtype" required>
 
-                        <label for="telefono">Teléfono:</label>
-                        <input type="text" id="telefono" v-model="selectedBar.phone" required>
+                        <label for="telefono">Precio:</label>
+                        <input type="text" id="telefono" v-model="selectedDrink.price" required>
 
-                        <label for="horario_apertura">Horario Apertura:</label>
-                        <input type="time" id="horario_apertura" v-model="selectedBar.entrytime" required>
+                        <label for="horario_apertura">Disponibilidad</label>
+                        <input type="time" id="horario_apertura" v-model="selectedDrink.availability" required>
 
-                        <label for="horario_cierre">Horario Cierre:</label>
-                        <input type="time" id="horario_cierre" v-model="selectedBar.closingtime" required>
-
-                        <button type="submit">Actualizar Bar</button>
+                        <button type="submit">Actualizar Bebidas</button>
                     </form>
                 </div>
             </div>
@@ -109,30 +102,27 @@
 <script>
 import axios from 'axios';
 export default {
-    name: 'ListaBares',
+    name: 'MyDrinks',
     data() {
         return {
-            bars: [],
+            drinks: [],
             currentPage: 1,
             itemsPerPage: 5,
             isLoading: false,
             showModal: false,
             showUpdateModal: false,
-            selectedBar: {
-                id: '',
+            selectedDrink: {
                 name: '',
-                location: '',
-                phone: '',
-                entrytime: '',
-                closingtime: ''
+                price: '',
+                availability: '',
+                idtype: ''
             },
             search: '',
-            bar: {
+            drink: {
                 name: '',
-                location: '',
-                phone: '',
-                entrytime: '',
-                closingtime: ''
+                price: '',
+                availability: '',
+                idtype: ''
             }
         };
     },
@@ -147,22 +137,21 @@ export default {
                 this.currentPage--;
             }
         },
-        fetchBars() {
-            axios.get('http://localhost:8090/pubs/listar')
-                .then(response => { this.bars = response.data; })
+        fetchDrinks() {
+            axios.get('http://localhost:8090/drink/listar')
+                .then(response => { this.drinks = response.data; })
                 .catch(error => { console.error(error); });
         },
-        saveBar() {
-            axios.post('http://localhost:8090/pubs/registrar', this.bar)
+        saveDrink() {
+            axios.post('http://localhost:8090/drink/registrar', this.drink)
                 .then(response => {
                     console.log(response.data);
-                    this.fetchBars();
-                    this.bar = {
-                        nombre: '',
-                        direccion: '',
-                        telefono: '',
-                        horario_apertura: '',
-                        horario_cierre: ''
+                    this.fetchDrinks();
+                    this.drink = {
+                        name: '',
+                        price: '',
+                        availability: '',
+                        idtype: ''
                     };
                 })
                 .catch(error => {
@@ -176,11 +165,11 @@ export default {
                     }, 750);
                 });
         },
-        deleteBar(id) {
-            axios.put(`http://localhost:8090/pubs/eliminar/${id}`)
+        deleteDrink(id) {
+            axios.put(`http://localhost:8090/drink/eliminar/${id}`)
                 .then(response => {
                     console.log(response.data);
-                    this.fetchBars();
+                    this.fetchDrinks();
                 })
                 .catch(error => {
                     console.error(error);
@@ -192,14 +181,13 @@ export default {
                     }, 750);
                 });
         },
-        // Método para editar un bar
-        updateBar() {
-            axios.put(`http://localhost:8090/pubs/actualizar/${this.selectedBar.id}`, this.selectedBar)
+        fupdateDrinks() {
+            axios.put(`http://localhost:8090/drink/actualizar/${this.selectedDrink.id}`, this.selectedDrink)
                 .then(response => {
                     console.log(response.data);
 
-                    const index = this.bars.findIndex(bar => bar.id === this.selectedBar.id);
-                    this.bars.splice(index, 1, this.selectedBar);
+                    const index = this.drinks.findIndex(drink => drink.id === this.selectedDrink.id);
+                    this.drinks.splice(index, 1, this.selectedDrink);
 
                     this.showUpdateModal = false;
                 })
@@ -217,12 +205,12 @@ export default {
 
     },
     mounted() {
-        this.fetchBars();
+        this.fetchDrinks();
     },
     computed: {
-        filteredAndPaginatedBars() {
-            const filtered = this.bars.filter(bar => {
-                return Object.values(bar).some(val => {
+        filteredAndPaginatedDrinks() {
+            const filtered = this.drinks.filter(drink => {
+                return Object.values(drink).some(val => {
                     if (val === null || val === undefined) {
                         return false;
                     }
@@ -240,8 +228,8 @@ export default {
             return filtered.slice(start, end);
         },
         totalPages() {
-            const filtered = this.bars.filter(bar => {
-                return Object.values(bar).some(val => {
+            const filtered = this.drinks.filter(drink => {
+                return Object.values(drink).some(val => {
                     if (val === null || val === undefined) {
                         return false;
                     }
@@ -258,7 +246,7 @@ export default {
         paginatedData() {
             const start = (this.currentPage - 1) * this.itemsPerPage;
             const end = start + this.itemsPerPage;
-            return this.bars.slice(start, end);
+            return this.drinks.slice(start, end);
         }
 
     }

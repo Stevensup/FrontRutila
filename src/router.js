@@ -4,6 +4,7 @@ import ListaDeBares from "./components/Bars.vue";
 import Customers from "./components/Customers.vue";
 import Users from "./components/Users.vue";
 import Welcome from "./components/Welcome.vue"; 
+import Drinks from "./components/Drinks.vue";
 
 
 const routes = [
@@ -31,6 +32,11 @@ const routes = [
     path: "/Welcome",
     name: "Welcome",
     component: Welcome,
+  },
+  {
+    path: "/Drinks",
+    name: "Drinks",
+    component: Drinks
   }
 ];
 
