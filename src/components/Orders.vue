@@ -1,14 +1,18 @@
 <template>  
-    <div>
-        <h1>Orders</h1>
-    </div>
+<div>
+    
+   <p>My Orders</p>
+
+</div>
 </template>
+
 
 <script>
 export default {
-    name: 'MyOrders'
+     name: 'MyOrders'
 }
 </script>
+
 
 <style scoped>
 
