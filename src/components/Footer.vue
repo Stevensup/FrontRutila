@@ -1,6 +1,6 @@
 <template>
     <footer class="footer" v-if="$route.name !== 'HelloWorld'">
-      <p>© 2024 Rutila Designe for Steven Useche Senior FrontEnd Developer</p>
+      <p>© 2024 Rutila Designe for Steven Useche Senior Developer & Santiago Melo middle Developer</p>
     </footer>
   </template>
   
