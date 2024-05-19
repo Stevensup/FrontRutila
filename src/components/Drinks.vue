@@ -35,9 +35,9 @@
                         </tr>
                         <tr v-else v-for="drink in filteredAndPaginatedDrinks" :key="`${drink.name}-${drink.price}`">
                             <td>{{ drink.name }}</td>
-                            <td>{{ drink.idtype }}</td>
-                            <td>{{ drink.price }}</td>
-                            <td>{{ drink.availability }}</td>
+                            <td>{{ drink.tipo }}</td>
+                            <td>$ {{ drink.price }} COP</td>
+                            <td>{{ drink.availability }} Unidades</td>
 
                             <td>
                                 <button class="delete" @click="deleteDrink(drink.id)">Eliminar</button>
@@ -62,14 +62,14 @@
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" v-model="drink.name" required>
 
-                            <label for="direccion">Dirección:</label>
-                            <input type="text" id="direccion" v-model="drink.idtype" required>
+                            <label for="tipoBebida">Bebida:</label>
+                            <input type="text" id="tipoBebida" v-model="drink.idtype" required>
 
-                            <label for="telefono">Teléfono:</label>
-                            <input type="text" id="telefono" v-model="drink.price" required>
+                            <label for="precio">Precio:</label>
+                            <input type="text" id="precio" v-model="drink.price" required>
 
-                            <label for="horario_apertura">Horario Apertura:</label>
-                            <input type="time" id="horario_apertura" v-model="drink.availability" required>
+                            <label for="disponibilidad">Disponibilidad:</label>
+                            <input type="number" id="disponibilidad" v-model="drink.availability" required>
 
                             <button type="submit">Agregar Bebida</button>
                         </form>
@@ -78,18 +78,19 @@
                 <div v-if="showUpdateModal" class="modal">
                     <div class="modal-content">
                         <span @click="showUpdateModal = false" class="close">&times;</span>
-                        <form @submit.prevent="fupdateDrinks">
+                        <form @submit.prevent="updateDrinks">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" v-model="selectedDrink.name" required>
 
-                            <label for="direccion">Tipo Bebida:</label>
-                            <input type="text" id="direccion" v-model="selectedDrink.idtype" required>
+                            <label for="bebida">Tipo Bebida:</label>
+                            <input type="text" id="bebida" v-model="drink.types " required>
+                            <!-- <input type="text" id="bebida" v-model="selectedDrink.tipo" required> -->
 
                             <label for="telefono">Precio:</label>
                             <input type="text" id="telefono" v-model="selectedDrink.price" required>
 
-                            <label for="horario_apertura">Disponibilidad</label>
-                            <input type="time" id="horario_apertura" v-model="selectedDrink.availability" required>
+                            <label for="Disponibilidad">Disponibilidad</label>
+                            <input type="number" id="Disponibilidad" v-model="selectedDrink.availability" required>
 
                             <button type="submit">Actualizar Bebidas</button>
                         </form>

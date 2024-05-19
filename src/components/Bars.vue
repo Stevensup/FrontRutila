@@ -11,6 +11,7 @@
             Cargando...
         </div>
         <div class="table-wrapper">
+            <h1>Bares</h1>
             <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
             <table>
                 <thead>

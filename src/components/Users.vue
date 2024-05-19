@@ -11,6 +11,7 @@
             Cargando...
         </div>
         <div class="table-wrapper">
+            <h1>Usuarios</h1>
             <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
             <table>
                 <thead>
@@ -147,7 +148,7 @@ export default {
                 .catch(error => { console.error(error); });
         },
         saveUser() {
-            const salt = bcrypt.genSaltSync(10);
+            const salt = bcrypt.genSaltSync(12);
             this.user.hash_password = bcrypt.hashSync(this.user.hash_password, salt);
             console.log(this.user);
             axios.post('http://localhost:8090/user/registrar', this.user)
