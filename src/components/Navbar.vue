@@ -12,7 +12,7 @@
                 <button class="nav-button" @click="navigate('/Orders')">Orders</button>
                 <button class="nav-button" @click="navigate('/Invoices')">Invoices</button>
                 <br>
-                <button class="nav-button-logaut" @click="navigate('/')">Logaut</button>
+                <img src="../assets/salida.png" class="nav-button-logaut" @click="navigate('/')" />
             </div>
             <div v-if="isLoading" class="loader">
                 <div class="flower-spinner">
