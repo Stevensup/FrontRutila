@@ -12,7 +12,10 @@
         </div>
         <div class="container">
             <div class="table-wrapper">
+                <div class="bearer">
                 <h1>Bebidas</h1>
+                <img width="80" height="80" src="../assets/ICONOBEBIDAS.png" alt="Imagen">
+            </div>
                 <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
                 <table>
                     <thead>

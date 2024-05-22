@@ -2,7 +2,7 @@
     <div class="table-container">
         <nav class="navbar" v-if="$route.name !== 'HelloWorld'">
             <div class="navbar-left">
-                <img width="100" height="50" src="../assets/RutilaIcon.png" alt="Rutila Icon" class="nav-icon">
+                <img width="180" height="70" src="../assets/LOGOU.png" alt="Rutila Icon" class="nav-icon">
             </div>
             <div class="navbar-right">
                 <button class="nav-button" @click="navigate('/ListaDeBares')">Bares</button>

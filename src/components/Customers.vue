@@ -11,7 +11,10 @@
             Cargando...
         </div>
         <div class="table-wrapper">
-            <h1>Clientes</h1>
+            <div class="bearer">
+                <h1>Clientes</h1>
+                <img width="80" height="80" src="../assets/ICONOUSUARIO.png" alt="Imagen">
+            </div>
             <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
             <table>
                 <thead>
@@ -238,6 +241,14 @@ export default {
 </script>
 
 <style scoped>
+
+
+.bearer {
+    display: flex;
+    align-items: center;
+}
+
+
 .no-results {
     display: flex;
     flex-direction: column;

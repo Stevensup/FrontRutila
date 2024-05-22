@@ -11,7 +11,10 @@
             Cargando...
         </div>
         <div class="table-wrapper">
-            <h1>Bares</h1>
+            <div class="bearer">
+                <h1>Bares</h1>
+                <img width="80" height="80" src="../assets/ICONOBAR.png" alt="Imagen">
+            </div>
             <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
             <table>
                 <thead>
@@ -41,7 +44,8 @@
                         <td>{{ bar.closingtime }}</td>
                         <td>
                             <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
-                            <button class="update" @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
+                            <button class="update"
+                                @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -267,6 +271,11 @@ export default {
 </script>
 
 <style scoped>
+.bearer {
+    display: flex;
+    align-items: center;
+}
+
 .no-results {
     display: flex;
     flex-direction: column;
