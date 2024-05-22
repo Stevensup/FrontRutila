@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="image-container">
-      <img src="../assets/login.jpg" alt="Imagen descriptiva">
+      <img src="../assets/tila1.jpg" alt="Imagen descriptiva">
     </div>
     <div class="login">
       <h1>Iniciar sesión</h1>
@@ -58,7 +58,13 @@ export default {
 }
 </script>
 
+
 <style scoped>
+
+body {
+  background-color: #2F9C75 !important;
+}
+
 .submit {
   background-color: #0F5944;
   color: white;
@@ -86,14 +92,15 @@ html {
 }
 
 .image-container {
-  flex: 2;
-  padding: 20px;
+  flex: 1;
+  padding: 10px;
 }
 
 .image-container img {
-  width: 100%;
+  width: 190%;
   height: 100%;
   object-fit: cover;
+  
 }
 
 .login {

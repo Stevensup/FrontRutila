@@ -1,8 +1,9 @@
 <template>
     <div class="bienvenida">
-        <h1>Bienvenido a Rutila</h1>
-        <img width="500" height="500" src="../assets/tita2.png" alt="Logo de Rutila">
-
+        <div class="text-container">
+            <h1>Bienvenido a Rutila</h1>
+        </div>
+        <img src="../assets/tila1.jpg" alt="Logo de Rutila">
     </div>
 </template>
 
@@ -15,23 +16,34 @@ export default {
 <style scoped>
 .bienvenida {
     padding: 20px;
-    text-align: center;
+    position: relative;
     background-color: white;
+}
+
+.text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 h1 {
     font-size: 6em;
-    color: #ffffff;
+    color: #000000; /* Cambia este color según tu diseño */
     text-shadow: 0 0 10px #12beb5, 0 0 20px #00ff00, 0 0 30px #12beb5, 0 0 40px #12beb5, 0 0 50px #12beb5, 0 0 60px #12beb5, 0 0 70px #12beb5;
-    
 }
 
-p {
-    font-size: 1.2em;
+
+.introduccion {
+    color: #888181;
+    font-size: 1.5em;
+    line-height: 1.6;
+    margin-top: 20px;
 }
 
 img {
-    margin-top: 20px;
-    max-width: 100%;
+    width: 70%;
+    height: auto;
 }
 </style>
