@@ -36,22 +36,19 @@ export default {
   methods: {
     async login() {
         try {
-          const response = await axios.get(`http://localhost:8090/login?email=${encodeURIComponent(this.user.email)}&userPassword=${encodeURIComponent(this.user.userPassword)}`);
-            console.log({ ...this.user, userPassword: '' });
+            const response = await axios.get(`http://localhost:8090/login?email=${encodeURIComponent(this.user.email)}&userPassword=${encodeURIComponent(this.user.userPassword)}`);
 
             if (response.data.estado === 'autenticado') {
                 this.$router.push('/Welcome');
                 swal("Usuario autenticado", "El usuario está autenticado", "success");
-            } else if (response.data.estado === 'bloqueado' || response.data.estado === 'fallido'){
-                // Manejar el caso en que el usuario no esté autenticado
-                console.log('Usuario no autenticado');
-                throw new Error('Cagada');                
+            } else if (response.data.estado === 'bloqueado') {
+                swal("Usuario bloqueado", response.data.message, "error"); 
+            } else {
+                console.log('Estado desconocido:', response.data.estado);
             }
         } catch (error) {
-            // Manejar el error
-            console.log(error);
-            this.error = 'Cagada';
-            swal("Error al iniciar sesión", "Cagada", "error");
+            console.error('Error al iniciar sesión:', error);
+            swal("Error al iniciar sesión", "Hubo un error al iniciar sesión", "error");
         }
     }
 }

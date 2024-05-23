@@ -12,6 +12,7 @@
         </div>
         <div class="container">
             <div class="table-wrapper">
+                
                 <div class="bearer">
                 <h1>Bebidas</h1>
                 <img width="80" height="80" src="../assets/ICONOBEBIDAS.png" alt="Imagen">
@@ -65,8 +66,10 @@
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" v-model="drink.name" required>
 
-                            <label for="tipoBebida">Bebida:</label>
-                            <input type="number" id="tipoBebida" v-model="drink.idtype" required>
+                            <label for="drinkTypeSelect">Tipo de Bebida:</label>
+                            <select id="drinkTypeSelect" v-model="drink.idtype" required>
+                            <option v-for="drinkType in drinkTypes" :key="drinkType.id" :value="drinkType.id">{{ drinkType.types }}</option>
+                            </select>
 
                             <label for="precio">Precio:</label>
                             <input type="text" id="precio" v-model="drink.price" required>
@@ -85,9 +88,11 @@
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" v-model="selectedDrink.name" required>
 
-                            <label for="bebida">Tipo Bebida:</label>
-                            <input type="number" id="bebida" v-model="drink.types " required>
-                            <!-- <input type="text" id="bebida" v-model="selectedDrink.tipo" required> -->
+                            <label for="drinkTypeSelect">Tipo de Bebida:</label>
+                            <select id="drinkTypeSelect" v-model="selectedDrink.idtype" required>
+                            <option v-for="drinkType in drinkTypes" :key="drinkType.id" :value="drinkType.id">{{ drinkType.types }}</option>
+                             </select>
+
 
                             <label for="telefono">Precio:</label>
                             <input type="text" id="telefono" v-model="selectedDrink.price" required>
@@ -121,7 +126,9 @@ export default {
 
     data() {
         return {
+            
             drinks: [],
+            drinkTypes: [],
             currentPage: 1,
             itemsPerPage: 5,
             isLoading: false,
@@ -152,7 +159,15 @@ export default {
             if (this.currentPage > 1) {
                 this.currentPage--;
             }
-        },
+        },fetchTypesDrinks() {
+    axios.get('http://localhost:8090/typeDrink/listar')
+        .then(response => {
+            this.drinkTypes = response.data;
+        })
+        .catch(error => {
+            console.error('Error al obtener tipos de bebidas:', error);
+        });
+},
         fetchDrinks() {
             axios.get('http://localhost:8090/drink/listar')
                 .then(response => { this.drinks = response.data; })
@@ -199,27 +214,19 @@ export default {
         },
         updateDrinks() {
             axios.put(`http://localhost:8090/drink/actualizar/${this.selectedDrink.id}`, this.selectedDrink)
-                .then(response => {
-                    console.log(response.data);
-
-                    const index = this.drinks.findIndex(drink => drink.id === this.selectedDrink.id);
-                    this.drinks.splice(index, 1, this.selectedDrink);
-
-                    this.showUpdateModal = false;
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    this.isLoading = true;
-                    setTimeout(() => {
-                        this.isLoading = false;
-                    }, 750);
-                });
-        }
+            .then(response => {
+                console.log('Bebida actualizada', response.data);
+                this.showUpdateModal = false;
+                this.fetchDrinks(); 
+            })
+            .catch(error => {
+                console.error('Error al actualizar la bebida', error);
+            });
+    },
 
     },
     mounted() {
+        this.fetchTypesDrinks();
         this.fetchDrinks();
     },
     computed: {
