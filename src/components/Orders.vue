@@ -35,7 +35,6 @@
                         <td>{{ bars[order.idpubs] }}</td>
                         <td>{{ users[order.idusers] }}</td>
                         <td>
-                            <button @click="viewInvoice(order)">Ver Orden</button>
                             <button @click="editOrder(order)">Editar</button>
                             <button @click="deleteOrder(order.id)">Eliminar</button>
                         </td>

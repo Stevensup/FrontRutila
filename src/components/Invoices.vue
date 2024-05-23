@@ -1,462 +1,405 @@
 <template>
-    <div class="container">
-        <div v-if="isLoading" class="loader">
-            <div class="flower-spinner">
-                <div class="dots-container">
-                    <div class="bigger-dot">
-                        <div class="smaller-dot"></div>
-                    </div>
-                </div>
-            </div>
-            Cargando...
+    <div>
+      <p>MyInvoices</p>
+      
+      <div class="search-bar">
+        <input 
+          type="text" 
+          v-model="search" 
+          placeholder="Search Invoices" 
+          class="search-input" 
+        />
+      </div>
+      
+      <div v-if="isLoading" class="loader">Loading...</div>
+  
+      <div v-if="!isLoading">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Date</th>
+              <th>Total</th>
+              <th>Order</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="invoice in paginatedInvoices" :key="invoice.id">
+              <td>{{ invoice.id }}</td>
+              <td>{{ invoice.date }}</td>
+              <td>{{ invoice.total }}</td>
+              <td>{{ orders[invoice.order] ? orders[invoice.order].name : '' }}</td>
+              <td>
+                <button class="update" @click="editInvoice(invoice)">Edit</button>
+                <button class="delete" @click="deleteInvoice(invoice.id)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+  
+        <div class="pagination">
+          <button :disabled="currentPage === 1" @click="currentPage--">Previous</button>
+          <span>Page {{ currentPage }}</span>
+          <button :disabled="currentPage === totalPages" @click="currentPage++">Next</button>
         </div>
-        <div class="table-wrapper">
-            <div class="bearer">
-                <h1>Facturas</h1>
-                <img width="80" height="80" src="../assets/ICONOFACTURA.png" alt="Imagen">
-            </div>
-            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Dirección</th>
-                        <th>Teléfono</th>
-                        <th>Horario Apertura</th>
-                        <th>Horario Cierre</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-if="filteredAndPaginatedBars.length === 0">
-                        <td colspan="6">
-                            <div class="no-results">
-                                <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                <span>Sin registros coincidentes</span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr v-else v-for="bar in filteredAndPaginatedBars" :key="`${bar.name}-${bar.phone}`">
-                        <td>{{ bar.name }}</td>
-                        <td>{{ bar.location }}</td>
-                        <td>{{ bar.phone }}</td>
-                        <td>{{ bar.entrytime }}</td>
-                        <td>{{ bar.closingtime }}</td>
-                        <td>
-                            <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
-                            <button class="update"
-                                @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="pagination">
-                <button @click="prevPage">Página anterior</button>
-                <span>Página {{ currentPage }} de {{ totalPages }}</span>
-                <button @click="nextPage">Página siguiente</button>
-            </div>
-            <div>
-                <button class="add" @click="showModal = true">Agregar Bar</button>
-            </div>
-            <div v-if="showModal" class="modal">
-                <div class="modal-content">
-                    <span @click="showModal = false" class="close">&times;</span>
-                    <form @submit.prevent="saveBar" class="form">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" v-model="bar.name" required>
+      </div>
+  
+      <button class="add" @click="showModal = true">Add Invoice</button>
+  
+      <!-- Add Invoice Modal -->
+      <div v-if="showModal" class="modal">
+        <div class="modal-content">
+          <span class="close" @click="showModal = false">&times;</span>
+          <form @submit.prevent="saveInvoice">
 
-                        <label for="direccion">Dirección:</label>
-                        <input type="text" id="direccion" v-model="bar.location" required>
-
-                        <label for="telefono">Teléfono:</label>
-                        <input type="text" id="telefono" v-model="bar.phone" required>
-
-                        <label for="horario_apertura">Horario Apertura:</label>
-                        <input type="time" id="horario_apertura" v-model="bar.entrytime" required>
-
-                        <label for="horario_cierre">Horario Cierre:</label>
-                        <input type="time" id="horario_cierre" v-model="bar.closingtime" required>
-
-                        <button type="submit">Agregar Bar</button>
-                    </form>
-                </div>
-            </div>
-            <div v-if="showUpdateModal" class="modal">
-                <div class="modal-content">
-                    <span @click="showUpdateModal = false" class="close">&times;</span>
-                    <form @submit.prevent="updateBar">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" v-model="selectedBar.name" required>
-
-                        <label for="direccion">Dirección:</label>
-                        <input type="text" id="direccion" v-model="selectedBar.location" required>
-
-                        <label for="telefono">Teléfono:</label>
-                        <input type="text" id="telefono" v-model="selectedBar.phone" required>
-
-                        <label for="horario_apertura">Horario Apertura:</label>
-                        <input type="time" id="horario_apertura" v-model="selectedBar.entrytime" required>
-
-                        <label for="horario_cierre">Horario Cierre:</label>
-                        <input type="time" id="horario_cierre" v-model="selectedBar.closingtime" required>
-
-                        <button type="submit">Actualizar Bar</button>
-                    </form>
-                </div>
-            </div>
+            
+            <label for="date">Date:</label>
+            <input type="text" v-model="newInvoice.date" required />
+            
+            <label for="total">Total:</label>
+            <input type="text" v-model="newInvoice.total" required />
+            
+            <label for="order">Order:</label>
+            <select v-model="newInvoice.order" required>
+              <option v-for="order in orders" :value="order.id" :key="order.id">{{ order.name }}</option>
+            </select>
+  
+            <button type="submit">Save</button>
+          </form>
         </div>
+      </div>
+  
+      <!-- Update Invoice Modal -->
+      <div v-if="showUpdateModal" class="modal">
+        <div class="modal-content">
+          <span class="close" @click="showUpdateModal = false">&times;</span>
+          <form @submit.prevent="updateInvoice">
+            <label for="id">ID:</label>
+            <input type="text" v-model="selectedInvoice.id" required disabled />
+            
+            <label for="date">Date:</label>
+            <input type="text" v-model="selectedInvoice.date" required />
+            
+            <label for="total">Total:</label>
+            <input type="text" v-model="selectedInvoice.total" required />
+            
+            <label for="order">Order:</label>
+            <select v-model="selectedInvoice.order" required>
+              <option v-for="order in orders" :value="order.id" :key="order.id">{{ order.name }}</option>
+            </select>
+  
+            <button type="submit">Update</button>
+          </form>
+        </div>
+      </div>
     </div>
-</template>
-
-
-
-<script>
-import axios from 'axios';
-export default {
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  
+  export default {
     name: 'MyInvoices',
     data() {
-        return {
-            bars: [],
-            currentPage: 1,
-            itemsPerPage: 5,
-            isLoading: false,
-            showModal: false,
-            showUpdateModal: false,
-            selectedBar: {
-                id: '',
-                name: '',
-                location: '',
-                phone: '',
-                entrytime: '',
-                closingtime: ''
-            },
-            search: '',
-            bar: {
-                name: '',
-                location: '',
-                phone: '',
-                entrytime: '',
-                closingtime: ''
-            }
-        };
+      return {
+        invoices: [],
+        orders: [],
+        currentPage: 1,
+        itemsPerPage: 5,
+        isLoading: false,
+        showModal: false,
+        showUpdateModal: false,
+        search: '',
+        newInvoice: {
+          id: '',
+          date: '',
+          total: '',
+          order: ''
+        },
+        selectedInvoice: {
+          id: '',
+          date: '',
+          total: '',
+          order: ''
+        }
+      };
     },
     methods: {
-        nextPage() {
-            if (this.currentPage < this.totalPages) {
-                this.currentPage++;
-            }
-        },
-        prevPage() {
-            if (this.currentPage > 1) {
-                this.currentPage--;
-            }
-        },
-        fetchBars() {
-            axios.get('http://localhost:8090/pubs/listar')
-                .then(response => { this.bars = response.data; })
-                .catch(error => { console.error(error); });
-        },
-        saveBar() {
-            axios.post('http://localhost:8090/pubs/registrar', this.bar)
-                .then(response => {
-                    console.log(response.data);
-                    this.fetchBars();
-                    this.bar = {
-                        nombre: '',
-                        direccion: '',
-                        telefono: '',
-                        horario_apertura: '',
-                        horario_cierre: ''
-                    };
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    this.showModal = false;
-                    this.isLoading = true;
-                    setTimeout(() => {
-                        this.isLoading = false;
-                    }, 750);
-                });
-        },
-        deleteBar(id) {
-            axios.put(`http://localhost:8090/pubs/eliminar/${id}`)
-                .then(response => {
-                    console.log(response.data);
-                    this.fetchBars();
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    this.isLoading = true;
-                    setTimeout(() => {
-                        this.isLoading = false;
-                    }, 750);
-                });
-        },
-        // Método para editar un bar
-        updateBar() {
-            axios.put(`http://localhost:8090/pubs/actualizar/${this.selectedBar.id}`, this.selectedBar)
-                .then(response => {
-                    console.log(response.data);
-
-                    const index = this.bars.findIndex(bar => bar.id === this.selectedBar.id);
-                    this.bars.splice(index, 1, this.selectedBar);
-
-                    this.showUpdateModal = false;
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    this.isLoading = true;
-                    setTimeout(() => {
-                        this.isLoading = false;
-                    }, 750);
-                });
-        }
-
-
+      fetchInvoices() {
+        this.isLoading = true;
+        axios.get('http://localhost:8090/invoice')
+          .then(response => {
+            this.invoices = response.data;
+          })
+          .catch(error => {
+            console.error(error);
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      },
+      fetchOrders() {
+        this.isLoading = true;
+        axios.get('http://localhost:8090/orders')
+          .then(response => {
+            this.orders = response.data.reduce((acc, order) => {
+              acc[order.id] = order;
+              return acc;
+            }, {});
+          })
+          .catch(error => {
+            console.error(error);
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      },
+      saveInvoice() {
+        this.isLoading = true;
+        axios.post('http://localhost:8090/invoice', this.newInvoice)
+          .then(() => {
+            this.fetchInvoices();
+            this.newInvoice = {
+              id: '',
+              date: '',
+              total: '',
+              order: ''
+            };
+            this.showModal = false;
+          })
+          .catch(error => {
+            console.error(error);
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      },
+      updateInvoice() {
+        this.isLoading = true;
+        axios.put(`http://localhost:8090/invoice/${this.selectedInvoice.id}`, this.selectedInvoice)
+          .then(() => {
+            this.fetchInvoices();
+            this.selectedInvoice = {
+              id: '',
+              date: '',
+              total: '',
+              order: ''
+            };
+            this.showUpdateModal = false;
+          })
+          .catch(error => {
+            console.error(error);
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      },
+      deleteInvoice(id) {
+        this.isLoading = true;
+        axios.delete(`http://localhost:8090/invoice/${id}`)
+          .then(() => {
+            this.fetchInvoices();
+          })
+          .catch(error => {
+            console.error(error);
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      },
+      editInvoice(invoice) {
+        this.selectedInvoice = { ...invoice };
+        this.showUpdateModal = true;
+      },
     },
     mounted() {
-        this.fetchBars();
+      this.fetchInvoices();
+      this.fetchOrders();
     },
     computed: {
-        filteredAndPaginatedBars() {
-            const filtered = this.bars.filter(bar => {
-                return Object.values(bar).some(val => {
-                    if (val === null || val === undefined) {
-                        return false;
-                    }
-
-                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
-                    const lowerCaseSearch = this.search.toLowerCase();
-
-                    return lowerCaseVal.includes(lowerCaseSearch);
-                });
-            });
-
-            const start = (this.currentPage - 1) * this.itemsPerPage;
-            const end = start + this.itemsPerPage;
-
-            return filtered.slice(start, end);
-        },
-        totalPages() {
-            const filtered = this.bars.filter(bar => {
-                return Object.values(bar).some(val => {
-                    if (val === null || val === undefined) {
-                        return false;
-                    }
-
-                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
-                    const lowerCaseSearch = this.search.toLowerCase();
-
-                    return lowerCaseVal.includes(lowerCaseSearch);
-                });
-            });
-
-            return Math.ceil(filtered.length / this.itemsPerPage);
-        },
-        paginatedData() {
-            const start = (this.currentPage - 1) * this.itemsPerPage;
-            const end = start + this.itemsPerPage;
-            return this.bars.slice(start, end);
-        }
-
+      filteredInvoices() {
+        return this.invoices.filter(invoice =>
+          invoice.id.includes(this.search) ||
+          invoice.date.includes(this.search) ||
+          invoice.total.includes(this.search) ||
+          (this.orders[invoice.order] && this.orders[invoice.order].name.includes(this.search))
+        );
+      },
+      paginatedInvoices() {
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        return this.filteredInvoices.slice(start, end);
+      },
+      totalPages() {
+        return Math.ceil(this.filteredInvoices.length / this.itemsPerPage);
+      }
     }
-
-};
-</script>
-
-<style scoped>
-
-.bearer {
+  };
+  </script>
+  
+  <style scoped>
+  .bearer {
     display: flex;
     align-items: center;
-}
-
-
-.no-results {
+  }
+  
+  .no-results {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-.no-results span {
+  }
+  
+  .no-results span {
     font-size: 2em;
-    /* Ajusta este valor para cambiar el tamaño del texto */
-}
-
-.search-input {
+  }
+  
+  .search-input {
     background-color: #ffffff;
     outline: none;
     border: none;
     font-weight: bold;
-}
-
-.search-input::placeholder {
+  }
+  
+  .search-input::placeholder {
     font-weight: bold;
-}
-
-
-body {
+  }
+  
+  body {
     font-family: Helvetica Neue, Arial, sans-serif;
     font-size: 14px;
-}
-
-table {
+  }
+  
+  table {
     border: 2px solid #0F5944;
     border-radius: 3px;
     background-color: #fff;
-}
-
-th {
+  }
+  
+  th {
     background-color: #0F5944;
     color: rgba(255, 255, 255, 0.66);
     cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
-}
-
-td {
+  }
+  
+  td {
     background-color: #f9f9f9;
-}
-
-th,
-td {
+  }
+  
+  th,
+  td {
     min-width: 120px;
     padding: 10px 20px;
-}
-
-th.active {
+  }
+  
+  th.active {
     color: #fff;
-}
-
-th.active .arrow {
+  }
+  
+  th.active .arrow {
     opacity: 1;
-}
-
-.arrow {
+  }
+  
+  .arrow {
     display: inline-block;
     vertical-align: middle;
     width: 0;
     height: 0;
     margin-left: 5px;
     opacity: 0.66;
-}
-
-.arrow.asc {
+  }
+  
+  .arrow.asc {
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     border-bottom: 4px solid #fff;
-}
-
-.arrow.dsc {
+  }
+  
+  .arrow.dsc {
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     border-top: 4px solid #fff;
-}
-
-
-.pagination {
+  }
+  
+  .pagination {
     display: flex;
     justify-content: space-between;
     padding: 1em 0;
-}
-
-.container {
+  }
+  
+  .container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 80vh;
-}
-
-.table-wrapper {
+  }
+  
+  .table-wrapper {
     background-color: #fff;
-}
-
-table {
+  }
+  
+  table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-thead {
-    background-color: #f8f9fa;
-}
-
-th,
-td {
-    padding: 10px;
+    border: 1px solid rgba(224, 224, 224, 1);
+  }
+  
+  th,
+  td {
     text-align: left;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-tr:hover {
-    background-color: #f5f5f5;
-}
-
-button {
-    background-color: #0F5944;
-    /* Green */
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    transition-duration: 0.4s;
-}
-
-button:hover {
-    background-color: #F28A2E;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-}
-
-label {
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ddd;
+    padding: 16px;
+  }
+  
+  th {
+    background-color: #f8f8f8;
+  }
+  
+  th:first-child {
+    border-radius: 10px 0 0 0;
+  }
+  
+  th:last-child {
+    border-radius: 0 10px 0 0;
+  }
+  
+  td:first-child {
+    border-radius: 0 0 0 10px;
+  }
+  
+  td:last-child {
+    border-radius: 0 0 10px 0;
+  }
+  
+  button {
+    padding: 8px 12px;
     border-radius: 4px;
-    margin-top: 5px;
-}
-
-button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
-}
-
-button[type="submit"]:hover {
-    background-color: #2614a1;
-}
-
-.modal {
+  }
+  
+  .add {
+    background-color: #00FF00;
+    color: #FFFFFF;
+  }
+  
+  .update {
+    background-color: #FFFF00;
+    color: #000000;
+  }
+  
+  .delete {
+    background-color: #FF0000;
+    color: #FFFFFF;
+  }
+  
+  .loader {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .modal {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -467,215 +410,28 @@ button[type="submit"]:hover {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-content {
     background-color: #fefefe;
-    margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-}
-
-.close {
-    color: #aaaaaa;
+  }
+  
+  .close {
+    color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
     text-decoration: none;
     cursor: pointer;
-}
-
-.modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
-
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    /* Aumenta la opacidad para oscurecer el fondo */
-    color: white;
-    font-size: 48px;
-    /* Aumenta el tamaño de la fuente */
-}
-
-.delete {
-    background-color: #F28A2E;
-
-}
-
-.update {
-    background-color: #11BFBF;
-
-}
-
-.add {
-    background-color: #90BF2A;
-
-}
-
-
-.flower-spinner,
-.flower-spinner * {
-    box-sizing: border-box;
-}
-
-.flower-spinner {
-    height: 70px;
-    width: 70px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.flower-spinner .dots-container {
-    height: calc(70px / 7);
-    width: calc(70px / 7);
-}
-
-.flower-spinner .smaller-dot {
-    background: #0cb6b9;
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-    animation: flower-spinner-smaller-dot-animation 2.5s 0s infinite both;
-
-}
-
-.flower-spinner .bigger-dot {
-    background: #0cb6b9;
-    height: 100%;
-    width: 100%;
-    padding: 10%;
-    border-radius: 50%;
-    animation: flower-spinner-bigger-dot-animation 2.5s 0s infinite both;
-}
-
-@keyframes flower-spinner-bigger-dot-animation {
-
-    0%,
-    100% {
-        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px;
-    }
-
-    50% {
-        transform: rotate(180deg);
-    }
-
-    25%,
-    75% {
-        box-shadow: rgb(12, 182, 185) 26px 0px 0px,
-            rgb(12, 182, 185) -26px 0px 0px,
-            rgb(12, 182, 185) 0px 26px 0px,
-            rgb(12, 182, 185) 0px -26px 0px,
-            rgb(12, 182, 185) 19px -19px 0px,
-            rgb(12, 182, 185) 19px 19px 0px,
-            rgb(12, 182, 185) -19px -19px 0px,
-            rgb(12, 182, 185) -19px 19px 0px;
-    }
-
-    100% {
-        transform: rotate(360deg);
-        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px;
-    }
-}
-
-@keyframes flower-spinner-smaller-dot-animation {
-
-    0%,
-    100% {
-        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px;
-    }
-
-    25%,
-    75% {
-        box-shadow: rgb(12, 182, 185) 14px 0px 0px,
-            rgb(12, 182, 185) -14px 0px 0px,
-            rgb(12, 182, 185) 0px 14px 0px,
-            rgb(12, 182, 185) 0px -14px 0px,
-            rgb(12, 182, 185) 10px -10px 0px,
-            rgb(12, 182, 185) 10px 10px 0px,
-            rgb(12, 182, 185) -10px -10px 0px,
-            rgb(12, 182, 185) -10px 10px 0px;
-    }
-
-    100% {
-        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px,
-            rgb(12, 182, 185) 0px 0px 0px;
-    }
-}
-</style>
+  }
+  </style>
+  
