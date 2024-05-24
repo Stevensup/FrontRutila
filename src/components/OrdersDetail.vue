@@ -8,22 +8,22 @@
                     </div>
                 </div>
             </div>
-            Cargando...
+            Loading...
         </div>
         <div class="table-wrapper">
             <div class="bearer">
-                <h1>Detalles de Órdenes</h1>
+                <h1>Order Details</h1>
                 <img width="80" height="80" src="../assets/ICONORDEN.png" alt="Imagen">
             </div>
-            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+            <input class="search-input" type="text" v-model="search" placeholder="Search...">
             <table>
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Cantidad</th>
-                        <th>Bebida</th>
-                        <th>Órden</th>
-                        <th>Acciones</th>
+                        <th>Amount</th>
+                        <th>Drink</th>
+                        <th>Order</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,7 +31,7 @@
                         <td colspan="6">
                             <div class="no-results">
                                 <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                <span>Sin registros coincidentes</span>
+                                <span>No matching records</span>
                             </div>
                         </td>
                     </tr>
@@ -42,20 +42,20 @@
                         <td>#{{ detail.id_order }}</td>
                         <td>
                             <button class="update"
-                                @click="selectedDetail = detail; showUpdateModal = true">Actualizar</button>
+                                @click="selectedDetail = detail; showUpdateModal = true">Update</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="pagination">
-                <button @click="prevPage">Página anterior</button>
-                <span>Página {{ currentPage }} de {{ totalPages }}</span>
-                <button @click="nextPage">Página siguiente</button>
+                <button @click="prevPage">Previous Page</button>
+                <span>Page {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage">Next Page</button>
             </div>
 
             <div>
-                <button class="add" @click="showModal = true">Agregar Bebidas</button>
+                <button class="add" @click="showModal = true">Add Order Detail</button>
             </div>
 
 
@@ -79,7 +79,7 @@
                                 }}</option>
                         </select>
 
-                        <button type="submit">Agregar Detalle</button>
+                        <button type="submit">Add Detail</button>
                     </form>
                 </div>
             </div>
@@ -189,7 +189,7 @@ export default {
                 });
         },
         deleteDetail(id) {
-            axios.delete(`http://localhost:8090/detailsOrder/eliminar/${id}`)
+            axios.put(`http://localhost:8090/detailsOrder/eliminar/${id}`)
                 .then(response => {
                     console.log(response.data);
                     this.fetchDetails();

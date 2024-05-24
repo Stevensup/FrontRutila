@@ -8,14 +8,14 @@
                     </div>
                 </div>
             </div>
-            Cargando...
+            Loading...
         </div>
         <div class="table-wrapper">
             <div class="bearer">
-                <h1>Usuarios</h1>
+                <h1>Users</h1>
                 <img width="80" height="80" src="../assets/ICONOUSUARIO.png" alt="Imagen">
             </div>
-            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+            <input class="search-input" type="text" v-model="search" placeholder="Search...">
             <table>
                 <thead>
                     <tr>
@@ -31,7 +31,7 @@
                         <td colspan="6">
                             <div class="no-results">
                                 <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                <span>Sin registros coincidentes</span>
+                                <span>No matching records</span>
                             </div>
                         </td>
                     </tr>
@@ -41,19 +41,19 @@
                         <td>{{ user.email }}</td>
                         <td>{{ user.id_role === 1 ? 'Admin' : 'Empleado' }}</td>
                         <td>
-                            <button class="delete" @click="deleteUser(user.id)">Eliminar</button>
-                            <button class="update" @click="selectedUser = user; showUpdateModal = true">Actualizar</button>
+                            <button class="delete" @click="deleteUser(user.id)">Delete</button>
+                            <button class="update" @click="selectedUser = user; showUpdateModal = true">Update</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="pagination">
-                <button @click="prevPage">Página anterior</button>
-                <span>Página {{ currentPage }} de {{ totalPages }}</span>
-                <button @click="nextPage">Página siguiente</button>
+                <button @click="prevPage">Previous Page</button>
+                <span>Page {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage">Next Page</button>
             </div>
             <div>
-                <button class="add" @click="showModal = true">Agregar un Usuario</button>
+                <button class="add" @click="showModal = true">Add User</button>
             </div>
             <div v-if="showModal" class="modal">
                 <div class="modal-content">

@@ -8,24 +8,24 @@
                     </div>
                 </div>
             </div>
-            Cargando...
+            Loading...
         </div>
         <div class="container">
             <div class="table-wrapper">
                 
                 <div class="bearer">
-                <h1>Bebidas</h1>
+                <h1>Drinks</h1>
                 <img width="80" height="80" src="../assets/ICONOBEBIDAS.png" alt="Imagen">
             </div>
-                <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+                <input class="search-input" type="text" v-model="search" placeholder="Search...">
                 <table>
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th>Tipo</th>
-                            <th>Precio</th>
-                            <th>disponibilidad</th>
-                            <th>Acciones</th>
+                            <th>Type</th>
+                            <th>Price</th>
+                            <th>Availability</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,7 +33,7 @@
                             <td colspan="6">
                                 <div class="no-results">
                                     <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                    <span>Sin registros coincidentes</span>
+                                    <span>No matching records</span>
                                 </div>
                             </td>
                         </tr>
@@ -44,20 +44,20 @@
                             <td>{{ drink.availability }} Unidades</td>
 
                             <td>
-                                <button class="delete" @click="deleteDrink(drink.id)">Eliminar</button>
+                                <button class="delete" @click="deleteDrink(drink.id)">Delete</button>
                                 <button class="update"
-                                    @click="selectedDrink = drink; showUpdateModal = true">Actualizar</button>
+                                    @click="selectedDrink = drink; showUpdateModal = true">Update</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="pagination">
-                    <button @click="prevPage">Página anterior</button>
-                    <span>Página {{ currentPage }} de {{ totalPages }}</span>
-                    <button @click="nextPage">Página siguiente</button>
+                    <button @click="prevPage">Previous Page</button>
+                    <span>Page {{ currentPage }} de {{ totalPages }}</span>
+                    <button @click="nextPage">Next Page</button>
                 </div>
                 <div>
-                    <button class="add" @click="showModal = true">Agregar Bebidas</button>
+                    <button class="add" @click="showModal = true">Add Drink</button>
                 </div>
                 <div v-if="showModal" class="modal">
                     <div class="modal-content">

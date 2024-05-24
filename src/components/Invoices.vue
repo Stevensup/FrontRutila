@@ -8,14 +8,14 @@
                     </div>
                 </div>
             </div>
-            Cargando...
+            Loading...
         </div>
         <div class="table-wrapper">
             <div class="bearer">
-                <h1>Facturas</h1>
+                <h1>Invoices</h1>
                 <img width="80" height="80" src="../assets/ICONOFACTURA.png" alt="Imagen">
             </div>
-            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+            <input class="search-input" type="text" v-model="search" placeholder="Search...">
             <table>
                 <thead>
                     <tr>
@@ -31,7 +31,7 @@
                         <td colspan="6">
                             <div class="no-results">
                                 <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                <span>Sin registros coincidentes</span>
+                                <span>No matching records</span>
                             </div>
                         </td>
                     </tr>

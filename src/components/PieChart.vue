@@ -1,17 +1,17 @@
 <template>
     <div>
-        <h1>Gráficos</h1>
+        <h1>Charts</h1>
         <br>
         <br>
         <br>
         <br>
         <br>
         <div class="chart-container">
-            <h3>Top 5 Bebidas más vendidas</h3>
+            <h3>Top 5 Best Selling Drinks</h3>
             <div ref="chart1" class="chart"></div>
-            <h3>Top 5 Pubs con más ingresos</h3>
+            <h3>Top 5 Pubs with Highest Revenue</h3>
             <div ref="chart2" class="chart"></div>
-            <h3>Top 5 Clientes más frecuentes</h3>
+            <h3>Top 5 Most Frequent Customers</h3>
             <div ref="chart3" class="chart"></div>
         </div>
     </div>

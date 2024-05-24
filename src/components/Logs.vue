@@ -42,8 +42,8 @@
                 </tr>
             </tbody>
         </table>
-        <button @click="page--" :disabled="page === 1">Anterior</button>
-        <button @click="page++" :disabled="page === maxPage">Siguiente</button>
+        <button @click="page--" :disabled="page === 1">Previous Page</button>
+        <button @click="page++" :disabled="page === maxPage">Next Page</button>
     </div>
 </template>
 

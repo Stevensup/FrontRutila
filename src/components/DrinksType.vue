@@ -8,17 +8,17 @@
                     </div>
                 </div>
             </div>
-            Cargando...
+            Loading...
         </div>
         <div class="table-wrapper">
-        <h1>Tipos de Bebidas</h1>
-                <input class="search-input" type="text" v-model="searchType" placeholder="Buscar...">
+        <h1>Types of Drinks</h1>
+                <input class="search-input" type="text" v-model="searchType" placeholder="Search...">
                 <table>
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Tipo</th>
-                            <th>Acciones</th>
+                            <th>Type</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,20 +34,20 @@
                             <td>{{ drinkType.id }}</td>
                             <td>{{ drinkType.types }}</td>
                             <td>
-                                <button class="delete" @click="deleteDrinkTypes(drinkType.id)">Eliminar</button>
-                                <button class="update" @click="selectedDrinkType = drinkType; showUpdateModalType = true">Actualizar</button>
+                                <button class="delete" @click="deleteDrinkTypes(drinkType.id)">Delete</button>
+                                <button class="update" @click="selectedDrinkType = drinkType; showUpdateModalType = true">Update</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div class="pagination">
-                    <button @click="prevPageType">Página anterior</button>
-                    <span>Página {{ currentPageType }} de {{ totalPagesType }}</span>
-                    <button @click="nextPageType">Página siguiente</button>
+                    <button @click="prevPageType">Previous Page</button>
+                    <span>Page {{ currentPageType }} de {{ totalPagesType }}</span>
+                    <button @click="nextPageType">Next Page</button>
                 </div>
                 <div>
-                    <button class="add" @click="showModalType = true">Agregar Tipo Bebidas</button>
+                    <button class="add" @click="showModalType = true">Add Type Drink</button>
                 </div>
                 <div v-if="showModalType" class="modal">
                     <div class="modal-content">

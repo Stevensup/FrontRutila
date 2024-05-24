@@ -1,7 +1,7 @@
 <template>
     <div class="bienvenida">
         <div class="text-container">
-            <h1>Bienvenido a Rutila</h1>
+            <h1>Welcome  to Rutila</h1>
         </div>
         <img src="../assets/tila1.jpg" alt="Logo de Rutila">
     </div>

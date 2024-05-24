@@ -8,23 +8,23 @@
                     </div>
                 </div>
             </div>
-            Cargando...
+            Loading...
         </div>
         <div class="table-wrapper">
             <div class="bearer">
-                <h1>Bares</h1>
+                <h1>Pubs</h1>
                 <img width="80" height="80" src="../assets/ICONOBAR.png" alt="Imagen">
             </div>
-            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+            <input class="search-input" type="text" v-model="search" placeholder="Search...">
             <table>
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Dirección</th>
-                        <th>Teléfono</th>
-                        <th>Horario Apertura</th>
-                        <th>Horario Cierre</th>
-                        <th>Acciones</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Opening Hours</th>
+                        <th>Closing Hours</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,7 +32,7 @@
                         <td colspan="6">
                             <div class="no-results">
                                 <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                <span>Sin registros coincidentes</span>
+                                <span>No matching records</span>
                             </div>
                         </td>
                     </tr>
@@ -43,21 +43,21 @@
                         <td>{{ bar.entrytime }}</td>
                         <td>{{ bar.closingtime }}</td>
                         <td>
-                            <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
-                            <button class="update" @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
+                            <button class="delete" @click="deleteBar(bar.id)">Delete</button>
+                            <button class="update" @click="selectedBar = bar; showUpdateModal = true">Update</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="pagination">
-                <button @click="prevPage">Página anterior</button>
-                <span>Página {{ currentPage }} de {{ totalPages }}</span>
-                <button @click="nextPage">Página siguiente</button>
+                <button @click="prevPage">Previus Page</button>
+                <span>Page {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage">Next Page</button>
             </div>
             
 
-                <button class="add" @click="showModal = true">Agregar Bar</button>
+                <button class="add" @click="showModal = true">Add Bar</button>
 
                  <!-- Add Bar Modal -->
             <div v-if="showModal" class="modal">

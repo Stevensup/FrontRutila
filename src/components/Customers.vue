@@ -8,14 +8,14 @@
                     </div>
                 </div>
             </div>
-            Cargando...
+            Loading...
         </div>
         <div class="table-wrapper">
             <div class="bearer">
-                <h1>Clientes</h1>
+                <h1>Clients</h1>
                 <img width="80" height="80" src="../assets/ICONOUSUARIO.png" alt="Imagen">
             </div>
-            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+            <input class="search-input" type="text" v-model="search" placeholder="Search...">
             <table>
                 <thead>
                     <tr>
@@ -31,7 +31,7 @@
                         <td colspan="6">
                             <div class="no-results">
                                 <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                <span>Sin registros coincidentes</span>
+                                <span>No matching records</span>
                             </div>
                         </td>
                     </tr>
@@ -42,21 +42,21 @@
                         <td>{{ customer.phone }}</td>
                         <td>{{ customer.email }}</td>
                         <td>
-                            <button class="delete" @click="deleteCustomer(customer.id)">Eliminar</button>
+                            <button class="delete" @click="deleteCustomer(customer.id)">Delete</button>
                             <button class="update"
-                                @click="selectedCustomer = customer; showUpdateModal = true">Actualizar</button>
+                                @click="selectedCustomer = customer; showUpdateModal = true">Update</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="pagination">
-                <button @click="prevPage">Página anterior</button>
-                <span>Página {{ currentPage }} de {{ totalPages }}</span>
-                <button @click="nextPage">Página siguiente</button>
+                <button @click="prevPage">Previous Page</button>
+                <span>Page {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage">Next Page</button>
 
             </div>
             <div>
-                <button @click="showModal = true">Agregar un Cliente</button>
+                <button @click="showModal = true"> Add Client</button>
             </div>
             <div v-if="showModal" class="modal">
                 <div class="modal-content">

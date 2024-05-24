@@ -8,24 +8,24 @@
                     </div>
                 </div>
             </div>
-            Cargando...
+            Loading...
         </div>
         <div class="table-wrapper">
             <div class="bearer">
-                <h1>Ordenes</h1>
+                <h1>Orders</h1>
                 <img width="80" height="80" src="../assets/ICONORDEN.png" alt="Imagen">
             </div>
-            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+            <input class="search-input" type="text" v-model="search" placeholder="Search...">
 
             <table class="table">
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Bar</th>
-                        <th>Usuario</th>
-                        <th>Acciones</th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Pubs</th>
+                        <th>User</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                         <td colspan="6">
                             <div class="no-results">
                                 <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                <span>Sin registros coincidentes</span>
+                                <span>No matching records</span>
                             </div>
                         </td>
                     </tr>
@@ -44,20 +44,20 @@
                         <td>{{ bars[order.idpubs] }}</td>
                         <td>{{ users[order.idusers] }}</td>
                         <td>
-                            <button class="update" @click="editOrder(order)">Editar</button>
-                            <button class="delete" @click="deleteOrder(order.id)">Eliminar</button>
+                            <button class="update" @click="editOrder(order)">Update</button>
+                            <button class="delete" @click="deleteOrder(order.id)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="pagination">
-                <button @click="prevPage">Página anterior</button>
-                <span>Página {{ currentPage }} de {{ totalPages }}</span>
-                <button @click="nextPage">Página siguiente</button>
+                <button @click="prevPage">Previous Page</button>
+                <span>Page {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage">Next Page</button>
             </div>
 
-            <button class="add" @click="showModal = true">Agregar Orden</button>
+            <button class="add" @click="showModal = true">Add Order</button>
 
         <!-- Modal para agregar nueva factura -->
         <div v-if="showModal" class="modal">
