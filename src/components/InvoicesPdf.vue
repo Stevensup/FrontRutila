@@ -1,21 +1,21 @@
 <template>
     <div>
-      <h1>Factura PDF</h1>
+      <h1>Invoices to PDF</h1>
       <form @submit.prevent="fetchInvoice">
         <label for="invoiceId">Ingrese el ID:</label>
         <input v-model="invoiceId" id="invoiceId" type="text">
         <button type="submit">Buscar</button>
       </form>
       <div v-if="invoice">
-        <h2>Número de factura: {{ invoice.invoiceNumber }}</h2>
-        <p>Cliente: {{ invoice.customerName }}</p>
-        <p>Cantidad: {{ invoice.quantity }}</p>
-        <p>Bebida: {{ invoice.drinkName }}</p>
-        <p>Precio de la bebida: {{ invoice.drinkPrice }}</p>
+        <h2># of invoice: {{ invoice.invoiceNumber }}</h2>
+        <p>Client: {{ invoice.customerName }}</p>
+        <p>quantity: {{ invoice.quantity }}</p>
+        <p>Drink: {{ invoice.drinkName }}</p>
+        <p>Price de la bebida: {{ invoice.drinkPrice }}</p>
         <p>Pub: {{ invoice.pubName }}</p>
-        <p>Vendedor: {{ invoice.sellerName }}</p>
+        <p>Seller: {{ invoice.sellerName }}</p>
         <p>Total: {{ invoice.totalPrice }}</p>
-        <p>Fecha de la factura: {{ invoice.invoiceDate }}</p>
+        <p>Date invoice: {{ invoice.invoiceDate }}</p>
       </div>
     </div>
   </template>
