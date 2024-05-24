@@ -4,7 +4,7 @@
       <img src="../assets/tila1.jpg" alt="Imagen descriptiva">
     </div>
     <div class="login">
-      <h1>Iniciar sesión</h1>
+      <h1>Login</h1>
       <form @submit.prevent="login">
         <label for="email">Email:</label>
         <input type="email" id="email" v-model="user.email" required>
@@ -40,7 +40,7 @@ export default {
 
             if (response.data.estado === 'autenticado') {
                 this.$router.push('/Welcome');
-                swal("Usuario autenticado", "El usuario está autenticado", "success");
+                swal("Login Succesfull", "The user is authenticated", "success");
             } else if (response.data.estado === 'bloqueado') {
                 swal("Usuario bloqueado", response.data.message, "error"); 
             } else {

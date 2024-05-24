@@ -53,10 +53,10 @@
                     <div class="modal-content">
                         <span @click="showModalType = false" class="close">&times;</span>
                         <form @submit.prevent="saveDrinkType" class="form">
-                            <label for="types">Tipo:</label>
+                            <label for="types">Type:</label>
                             <input type="text" id="types" v-model="drinkType.types" required>
 
-                            <button type="submit">Agregar Bebida</button>
+                            <button type="submit">Add Type Of Drink:</button>
                         </form>
                     </div>
                 </div>
@@ -65,10 +65,10 @@
                         <span @click="showUpdateModalType = false" class="close">&times;</span>
                         <form @submit.prevent="updateDrinksTypes">
     
-                            <label for="direccion">Tipo Bebida:</label>
+                            <label for="direccion">Type Of Drink:</label>
                             <input type="text" id="direccion" v-model="selectedDrinkType.types" required>
 
-                            <button type="submit">Actualizar Bebidas</button>
+                            <button type="submit">Update Type Of Drink</button>
                         </form>
                     </div>
                 </div>

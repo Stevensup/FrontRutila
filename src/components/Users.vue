@@ -61,19 +61,19 @@
                     <form @submit.prevent="saveUser" class="form">
                         <label for="role">Role:</label>
                         <select id="id_role" v-model.number="user.id_role" required>
-                            <option value="">Seleccione un rol</option>
+                            <option value="">Select rol</option>
                             <option value="1">Admin</option>
-                            <option value="2">Empleado</option>
+                            <option value="2">Employee</option>
                         </select>
                         <label for="name">Name:</label>
                         <input type="text" id="name" v-model="user.name" required>
                         <label for="phone">Phone:</label>
-                        <input type="text" id="phone" v-model="user.phone" required>
+                        <input type="number" id="phone" v-model="user.phone" required>
                         <label for="email">Email:</label>
                         <input type="email" id="email" v-model="user.email" required>
                         <label for="hash_password">Password:</label>
                         <input type="password" id="hash_password" v-model="user.hash_password" required>
-                        <button type="submit">Agregar Cliente</button>
+                        <button type="submit">Add User</button>
                     </form>
                 </div>
             </div>
@@ -90,12 +90,12 @@
                         <label for="name">Name:</label>
                         <input type="text" id="name" v-model="selectedUser.name" required>
                         <label for="phone">Phone:</label>
-                        <input type="text" id="phone" v-model="selectedUser.phone" required>
+                        <input type="number" id="phone" v-model="selectedUser.phone" required>
                         <label for="email">Email:</label>
                         <input type="email" id="email" v-model="selectedUser.email" required>
                         <label for="hash_password">Password:</label>
                         <input type="password" id="hash_password" v-model="selectedUser.hash_password" required>
-                        <button type="submit">Actualizar Cliente</button>
+                        <button type="submit">Update User</button>
                     </form>
                 </div>
             </div>

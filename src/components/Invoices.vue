@@ -97,7 +97,7 @@
                             <option v-for="order in orders" :value="order.id_order" :key="order.id">{{ order.id }}</option>
                         </select>
 
-                        <button type="submit">Actualizar Bar</button>
+                        <button type="submit">Update Bar</button>
                     </form>
                 </div>
             </div>

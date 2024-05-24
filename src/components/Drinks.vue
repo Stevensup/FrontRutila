@@ -63,21 +63,21 @@
                     <div class="modal-content">
                         <span @click="showModal = false" class="close">&times;</span>
                         <form @submit.prevent="saveDrink" class="form">
-                            <label for="nombre">Nombre:</label>
+                            <label for="nombre">Name:</label>
                             <input type="text" id="nombre" v-model="drink.name" required>
 
-                            <label for="drinkTypeSelect">Tipo de Bebida:</label>
+                            <label for="drinkTypeSelect">Type Of Drink:</label>
                             <select id="drinkTypeSelect" v-model="drink.idtype" required>
                             <option v-for="drinkType in drinkTypes" :key="drinkType.id" :value="drinkType.id">{{ drinkType.types }}</option>
                             </select>
 
-                            <label for="precio">Precio:</label>
-                            <input type="text" id="precio" v-model="drink.price" required>
+                            <label for="precio">Price:</label>
+                            <input type="number" id="precio" v-model="drink.price" required>
 
-                            <label for="disponibilidad">Disponibilidad:</label>
+                            <label for="disponibilidad">Availability:</label>
                             <input type="number" id="disponibilidad" v-model="drink.availability" required>
 
-                            <button type="submit">Agregar Bebida</button>
+                            <button type="submit">Add Drink</button>
                         </form>
                     </div>
                 </div>
@@ -85,22 +85,22 @@
                     <div class="modal-content">
                         <span @click="showUpdateModal = false" class="close">&times;</span>
                         <form @submit.prevent="updateDrinks">
-                            <label for="nombre">Nombre:</label>
+                            <label for="nombre">Name:</label>
                             <input type="text" id="nombre" v-model="selectedDrink.name" required>
 
-                            <label for="drinkTypeSelect">Tipo de Bebida:</label>
+                            <label for="drinkTypeSelect">Type Of Drink:</label>
                             <select id="drinkTypeSelect" v-model="selectedDrink.idtype" required>
                             <option v-for="drinkType in drinkTypes" :key="drinkType.id" :value="drinkType.id">{{ drinkType.types }}</option>
                              </select>
 
 
-                            <label for="telefono">Precio:</label>
-                            <input type="text" id="telefono" v-model="selectedDrink.price" required>
+                            <label for="telefono">Price:</label>
+                            <input type="number" id="telefono" v-model="selectedDrink.price" required>
 
-                            <label for="Disponibilidad">Disponibilidad</label>
+                            <label for="Disponibilidad">Availability</label>
                             <input type="number" id="Disponibilidad" v-model="selectedDrink.availability" required>
 
-                            <button type="submit">Actualizar Bebidas</button>
+                            <button type="submit">Update Drinks</button>
                         </form>
                     </div>
                 </div>

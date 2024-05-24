@@ -64,16 +64,16 @@
                     <span @click="showModal = false" class="close">&times;</span>
                     <form @submit.prevent="saveDetail" class="form">
 
-                        <label for="productName">Cantidad:</label>
+                        <label for="productName">Amount:</label>
                         <input type="number" id="productName" v-model="detail.amount" required>
 
-                        <label for="drinkSelect">Bebida:</label>
+                        <label for="drinkSelect">Drink:</label>
                         <select id="drinkSelect" v-model="detail.id_drink" required>
                             <option v-for="(drink, index) in drinks" :value="drink.id" v-bind:key="index">{{ drink.name
                                 }}</option>
                         </select>
 
-                        <label for="orderSelect">Orden:</label>
+                        <label for="orderSelect">Order:</label>
                         <select id="orderSelect" v-model="detail.id_order" required>
                             <option v-for="(order, index) in orders" :value="order.id" v-bind:key="index">{{ order.id
                                 }}</option>
@@ -90,20 +90,20 @@
                     <span @click="showUpdateModal = false" class="close">&times;</span>
                     <form @submit.prevent="updateDetail">
 
-                        <label for="productName">Cantidad:</label>
+                        <label for="productName">Amount:</label>
                         <input type="number" id="productName" v-model="selectedDetail.amount" required> 
 
-                        <label for="quantity">Bebida:</label>
+                        <label for="quantity">Drink:</label>
                         <select id="drinkTypeSelect" v-model="selectedDetail.id_drink" required>
                             <option v-for="drink in drinks" :key="drink.id" :value="drink.id">{{ drink.name }}</option>
                         </select>
 
-                        <label for="price">Orden:</label>
+                        <label for="price">Order:</label>
                         <select id="orderSelect" v-model="selectedDetail.id_order" required>
                             <option v-for="order in orders" :key="order.id" :value="order.id">{{ order.id }}</option>
                         </select>
 
-                        <button type="submit">Actualizar Detalle</button>
+                        <button type="submit">Update Detail</button>
                     </form>
                 </div>
             </div>

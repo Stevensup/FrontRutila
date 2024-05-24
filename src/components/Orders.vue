@@ -66,28 +66,28 @@
                 <h2>Agregar Nueva Factura</h2>
                 <form @submit.prevent="saveOrder">
                     <div>
-                        <label for="dates">Fecha:</label>
+                        <label for="dates">Date:</label>
                         <input type="date" v-model="newOrder.dates" required>
                     </div>
                     <div>
-                        <label for="idcustomers">Cliente:</label>
+                        <label for="idcustomers">Client:</label>
                         <select v-model="newOrder.idcustomers" required>
                             <option v-for="(name, id) in customers" :key="id" :value="id">{{ name }}</option>
                         </select>
                     </div>
                     <div>
-                        <label for="idpubs">Bar:</label>
+                        <label for="idpubs">Pub:</label>
                         <select v-model="newOrder.idpubs" required>
                             <option v-for="(name, id) in bars" :key="id" :value="id">{{ name }}</option>
                         </select>
                     </div>
                     <div>
-                        <label for="idusers">Usuario:</label>
+                        <label for="idusers">User:</label>
                         <select v-model="newOrder.idusers" required>
                             <option v-for="(name, id) in users" :key="id" :value="id">{{ name }}</option>
                         </select>
                     </div>
-                    <button type="submit">Guardar</button>
+                    <button type="submit">Save</button>
                 </form>
             </div>
         </div>
@@ -99,28 +99,28 @@
                 <h2>Editar Factura</h2>
                 <form @submit.prevent="updateOrder">
                     <div>
-                        <label for="dates">Fecha:</label>
+                        <label for="dates">Date:</label>
                         <input type="date" v-model="SelectedOrder.dates" required>
                     </div>
                     <div>
-                        <label for="idcustomers">Cliente:</label>
+                        <label for="idcustomers">Client:</label>
                         <select v-model="SelectedOrder.idcustomers" required>
                             <option v-for="(name, id) in customers" :key="id" :value="id">{{ name }}</option>
                         </select>
                     </div>
                     <div>
-                        <label for="idpubs">Bar:</label>
+                        <label for="idpubs">Pub:</label>
                         <select v-model="SelectedOrder.idpubs" required>
                             <option v-for="(name, id) in bars" :key="id" :value="id">{{ name }}</option>
                         </select>
                     </div>
                     <div>
-                        <label for="idusers">Usuario:</label>
+                        <label for="idusers">User:</label>
                         <select v-model="SelectedOrder.idusers" required>
                             <option v-for="(name, id) in users" :key="id" :value="id">{{ name }}</option>
                         </select>
                     </div>
-                    <button type="submit">Guardar</button>
+                    <button type="submit">Save</button>
                 </form>
             </div>
         </div>
@@ -132,11 +132,11 @@
                 <h2>Factura</h2>
                 <img src="../assets/tita2.png" alt="Logo Empresa" class="logo">
                 <div class="invoice-details">
-                    <p><strong>Cliente:</strong> {{ customers[SelectedOrder.idcustomers] }}</p>
-                    <p><strong>Bar:</strong> {{ bars[SelectedOrder.idpubs] }}</p>
-                    <p><strong>Usuario:</strong> {{ users[SelectedOrder.idusers] }}</p>
-                    <p><strong>Fecha:</strong> {{ SelectedOrder.dates }}</p>
-                    <p><strong>ID de Orden:</strong> {{ SelectedOrder.id }}</p>
+                    <p><strong>Client:</strong> {{ customers[SelectedOrder.idcustomers] }}</p>
+                    <p><strong>Pub:</strong> {{ bars[SelectedOrder.idpubs] }}</p>
+                    <p><strong>User:</strong> {{ users[SelectedOrder.idusers] }}</p>
+                    <p><strong>Date:</strong> {{ SelectedOrder.dates }}</p>
+                    <p><strong>ID Order:</strong> {{ SelectedOrder.id }}</p>
                 </div>
                 <button @click="exportPDF">Exportar a PDF</button>
             </div>

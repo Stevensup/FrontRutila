@@ -64,19 +64,19 @@
                 <div class="modal-content">
                     <span @click="showModal = false" class="close">&times;</span>
                     <form @submit.prevent="saveBar" class="form">
-                        <label for="nombre">Nombre:</label>
+                        <label for="nombre">Name:</label>
                         <input type="text" id="nombre" v-model="bar.name" required>
 
-                        <label for="direccion">Dirección:</label>
+                        <label for="direccion">Address:</label>
                         <input type="text" id="direccion" v-model="bar.location" required>
 
-                        <label for="telefono">Teléfono:</label>
-                        <input type="text" id="telefono" v-model="bar.phone" required>
+                        <label for="telefono">Phone:</label>
+                        <input type="number" id="telefono" v-model="bar.phone" required>
 
-                        <label for="horario_apertura">Horario Apertura:</label>
+                        <label for="horario_apertura">Opening Hours:</label>
                         <input type="time" id="horario_apertura" v-model="bar.entrytime" required>
 
-                        <label for="horario_cierre">Horario Cierre:</label>
+                        <label for="horario_cierre">Closing Hours:</label>
                         <input type="time" id="horario_cierre" v-model="bar.closingtime" required>
 
                         <button type="submit">Agregar Bar</button>
@@ -89,19 +89,19 @@
                 <div class="modal-content">
                     <span @click="showUpdateModal = false" class="close">&times;</span>
                     <form @submit.prevent="updateBar">
-                        <label for="nombre">Nombre:</label>
+                        <label for="nombre">Name:</label>
                         <input type="text" id="nombre" v-model="selectedBar.name" required>
 
-                        <label for="direccion">Dirección:</label>
-                        <input type="text" id="direccion" v-model="selectedBar.location" required>
+                        <label for="direccion">Address:</label>
+                        <input type="number" id="direccion" v-model="selectedBar.location" required>
 
-                        <label for="telefono">Teléfono:</label>
-                        <input type="text" id="telefono" v-model="selectedBar.phone" required>
+                        <label for="telefono">Phone:</label>
+                        <input type="number" id="telefono" v-model="selectedBar.phone" required>
 
-                        <label for="horario_apertura">Horario Apertura:</label>
+                        <label for="horario_apertura">Opening Hours:</label>
                         <input type="time" id="horario_apertura" v-model="selectedBar.entrytime" required>
 
-                        <label for="horario_cierre">Horario Cierre:</label>
+                        <label for="horario_cierre">Closing Hours:</label>
                         <input type="time" id="horario_cierre" v-model="selectedBar.closingtime" required>
 
                         <button type="submit">Actualizar Bar</button>

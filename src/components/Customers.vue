@@ -67,10 +67,10 @@
                         <label for="location">Location:</label>
                         <input type="text" id="location" v-model="newCustomer.location" required>
                         <label for="phone">Phone:</label>
-                        <input type="text" id="phone" v-model="newCustomer.phone" required>
+                        <input type="number" id="phone" v-model="newCustomer.phone" required>
                         <label for="email">Email:</label>
                         <input type="email" id="email" v-model="newCustomer.email" required>
-                        <button type="submit">Agregar Cliente</button>
+                        <button type="submit">Add Client</button>
                     </form>
                 </div>
             </div>
@@ -83,10 +83,10 @@
                         <label for="location">Location:</label>
                         <input type="text" id="location" v-model="selectedCustomer.location" required>
                         <label for="phone">Phone:</label>
-                        <input type="text" id="phone" v-model="selectedCustomer.phone" required>
+                        <input type="number" id="phone" v-model="selectedCustomer.phone" required>
                         <label for="email">Email:</label>
                         <input type="email" id="email" v-model="selectedCustomer.email" required>
-                        <button type="submit">Actualizar Cliente</button>
+                        <button type="submit">Add Client</button>
                     </form>
                 </div>
             </div>

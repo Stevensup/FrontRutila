@@ -5,7 +5,7 @@
                 <img width="180" height="70" src="../assets/LOGOU.png" alt="Rutila Icon" class="nav-icon">
             </div>
             <div class="navbar-right">
-                <button class="nav-button" @click="navigate('/ListaDeBares')">Bares</button>
+                <button class="nav-button" @click="navigate('/ListaDeBares')">Pubs</button>
                 <button class="nav-button" @click="navigate('/Customers')">Customers</button>
                 <button class="nav-button" @click="navigate('/Users')">Users</button>
                 <button class="nav-button" @click="navigate('/Drinks')">Drinks</button>
