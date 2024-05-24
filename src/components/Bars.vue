@@ -79,7 +79,7 @@
                         <label for="horario_cierre">Closing Hours:</label>
                         <input type="time" id="horario_cierre" v-model="bar.closingtime" required>
 
-                        <button type="submit">Agregar Bar</button>
+                        <button type="submit">Add Bar</button>
                     </form>
                 </div>
             </div>
