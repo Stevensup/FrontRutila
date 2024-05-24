@@ -9,6 +9,7 @@ import DrinksType from "./components/DrinksType.vue";
 import Invoices from "./components/Invoices.vue";
 import Orders from "./components/Orders.vue";
 import PieChart from "./components/PieChart.vue";
+import Logs from "./components/Logs.vue";
 
 const routes = [
   {
@@ -60,6 +61,11 @@ const routes = [
     path:"/PieChart",
     name:"PieChart",
     component: PieChart
+  },
+  {
+    path:"/logs",
+    name:"Logs",
+    component: Logs
   }
 ];
 
