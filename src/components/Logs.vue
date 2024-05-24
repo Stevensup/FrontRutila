@@ -27,7 +27,7 @@
                     </th>
                     <th>
                         Date
-                        <input type="text" v-model="filters.dates" placeholder="Filtrar Date...">
+                        <input type="date" v-model="filters.dates" placeholder="Filtrar Date...">
                     </th>
                 </tr>
             </thead>
@@ -94,11 +94,10 @@ export default {
 };
 </script>
 
-<style>
-/* Estilos CSS para la tabla */
+<style scoped>
 .my-table {
-    width: 80%; /* Hacer la tabla un poco más pequeña */
-    margin: auto; /* Centrar la tabla */
+    width: 80%;
+    margin: auto;
     border-collapse: collapse;
 }
 
@@ -109,6 +108,12 @@ export default {
 }
 
 .my-table th {
-    background-color: #f2f2f2;
+    background-color: #0F5944;
+}
+
+.my-table input[type="text"] {
+    margin-top: 5px;
+    padding: 5px;
+    font-size: 0.9em;
 }
 </style>
