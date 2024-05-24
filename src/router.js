@@ -10,6 +10,7 @@ import Invoices from "./components/Invoices.vue";
 import Orders from "./components/Orders.vue";
 import PieChart from "./components/PieChart.vue";
 import Logs from "./components/Logs.vue";
+import OrdersDetail from "./components/OrdersDetail.vue";
 
 const routes = [
   {
@@ -66,7 +67,12 @@ const routes = [
     path:"/logs",
     name:"Logs",
     component: Logs
-  }
+  },
+{
+  path: "/OrdersDetail",
+  name: "OrdersDetail",
+  component: OrdersDetail
+}
 ];
 
 const router = createRouter({

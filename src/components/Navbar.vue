@@ -13,6 +13,7 @@
                 <button class="nav-button" @click="navigate('/Invoices')">Invoices</button>
                 <button class="nav-button" @click="navigate('/PieChart')">Views</button>
                 <button class="nav-button" @click="navigate('/Logs')">Logs</button>
+                <button class="nav-button" @click="navigate('/OrdersDetail')">Orders Detail</button>
                 <br>
                 <img src="../assets/salida.png" class="nav-button-logaut" @click="navigate('/')" />
             </div>
