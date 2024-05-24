@@ -11,6 +11,7 @@ import Orders from "./components/Orders.vue";
 import PieChart from "./components/PieChart.vue";
 import Logs from "./components/Logs.vue";
 import OrdersDetail from "./components/OrdersDetail.vue";
+import InvoicesPdf from "./components/InvoicesPdf.vue";
 
 const routes = [
   {
@@ -72,6 +73,11 @@ const routes = [
   path: "/OrdersDetail",
   name: "OrdersDetail",
   component: OrdersDetail
+},
+{
+  path: "/pdf",
+  name: "pdf",
+  component: InvoicesPdf
 }
 ];
 

@@ -26,7 +26,7 @@
                             <td colspan="6">
                                 <div class="no-results">
                                     <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
-                                    <span>No existen registros actualmente</span>
+                                    <span>No more</span>
                                 </div>
                             </td>
                         </tr>

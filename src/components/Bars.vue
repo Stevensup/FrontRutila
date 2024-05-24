@@ -93,7 +93,7 @@
                         <input type="text" id="nombre" v-model="selectedBar.name" required>
 
                         <label for="direccion">Address:</label>
-                        <input type="number" id="direccion" v-model="selectedBar.location" required>
+                        <input type="text" id="direccion" v-model="selectedBar.location" required>
 
                         <label for="telefono">Phone:</label>
                         <input type="number" id="telefono" v-model="selectedBar.phone" required>
