@@ -44,20 +44,22 @@
                         <td>{{ bar.closingtime }}</td>
                         <td>
                             <button class="delete" @click="deleteBar(bar.id)">Eliminar</button>
-                            <button class="update"
-                                @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
+                            <button class="update" @click="selectedBar = bar; showUpdateModal = true">Actualizar</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+
             <div class="pagination">
                 <button @click="prevPage">Página anterior</button>
                 <span>Página {{ currentPage }} de {{ totalPages }}</span>
                 <button @click="nextPage">Página siguiente</button>
             </div>
-            <div>
+            
+
                 <button class="add" @click="showModal = true">Agregar Bar</button>
-            </div>
+
+                 <!-- Add Bar Modal -->
             <div v-if="showModal" class="modal">
                 <div class="modal-content">
                     <span @click="showModal = false" class="close">&times;</span>
@@ -81,6 +83,8 @@
                     </form>
                 </div>
             </div>
+
+            <!-- Update Bar Modal -->
             <div v-if="showUpdateModal" class="modal">
                 <div class="modal-content">
                     <span @click="showUpdateModal = false" class="close">&times;</span>

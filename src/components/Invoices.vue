@@ -1,14 +1,21 @@
 <template>
-    <div>
-        <p>MyInvoices</p>
-
-        <div class="search-bar">
-            <input type="text" v-model="search" placeholder="Search Invoices" class="search-input" />
+    <div class="container">
+        <div v-if="isLoading" class="loader">
+            <div class="flower-spinner">
+                <div class="dots-container">
+                    <div class="bigger-dot">
+                        <div class="smaller-dot"></div>
+                    </div>
+                </div>
+            </div>
+            Cargando...
         </div>
-
-        <div v-if="isLoading" class="loader">Loading...</div>
-
-        <div v-if="!isLoading">
+        <div class="table-wrapper">
+            <div class="bearer">
+                <h1>Facturas</h1>
+                <img width="80" height="80" src="../assets/ICONOFACTURA.png" alt="Imagen">
+            </div>
+            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
             <table>
                 <thead>
                     <tr>
@@ -20,14 +27,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="invoice in paginatedInvoices" :key="invoice.id">
+                    <tr v-if="filteredAndPaginatedInvoices.length === 0">
+                        <td colspan="6">
+                            <div class="no-results">
+                                <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
+                                <span>Sin registros coincidentes</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-for="invoice in filteredAndPaginatedInvoices" :key="invoice.id">
                         <td>{{ invoice.id }}</td>
-                        <td>{{ invoice.date }}</td>
+                        <td>{{ invoice.dates }}</td>
                         <td>{{ invoice.total }}</td>
-                        <td>{{ orders[invoice.order] ? orders[invoice.order].name : '' }}</td>
+                        <td>{{ orders.id_order }}</td>
                         <td>
-                            <button class="update" @click="editInvoice(invoice)">Edit</button>
                             <button class="delete" @click="deleteInvoice(invoice.id)">Delete</button>
+                            <button class="update"
+                                @click="selectedInvoice = invoice; showUpdateModal = true">Update</button>
                         </td>
                     </tr>
                 </tbody>
@@ -38,54 +54,52 @@
                 <span>Page {{ currentPage }}</span>
                 <button :disabled="currentPage === totalPages" @click="currentPage++">Next</button>
             </div>
-        </div>
 
-        <button class="add" @click="showModal = true">Add Invoice</button>
+            <button class="add" @click="showModal = true">Add Invoice</button>
 
-        <!-- Add Invoice Modal -->
-        <div v-if="showModal" class="modal">
-            <div class="modal-content">
-                <span class="close" @click="showModal = false">&times;</span>
-                <form @submit.prevent="saveInvoice">
+            <!-- Add Invoice Modal -->
+            <div v-if="showModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" @click="showModal = false">&times;</span>
+                    <form @submit.prevent="saveInvoice">
 
-                    <label for="date">Date:</label>
-                    <input type="text" v-model="newInvoice.dates" required />
+                        <label for="date">Date:</label>
+                        <input type="text" v-model="newInvoice.dates" required />
 
-                    <label for="total">Total:</label>
-                    <input type="text" v-model="newInvoice.total" required />
+                        <label for="total">Total:</label>
+                        <input type="text" v-model="newInvoice.total" required />
 
-                    <label for="order">Order:</label>
-                    <select v-model="newInvoice.id_order" required>
-                        <option v-for="order in orders" :value="order.id" :key="order.id">{{ order.id }}</option>
-                    </select>
-
-
-                    <button type="submit">Save</button>
-                </form>
+                        <label for="order">Order:</label>
+                        <select v-model="newInvoice.id_order" required>
+                            <option v-for="order in orders" :value="order.id" :key="order.id">{{ order.id }}</option>
+                        </select>
+                        <button type="submit">Save</button>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <!-- Update Invoice Modal -->
-        <div v-if="showUpdateModal" class="modal">
-            <div class="modal-content">
-                <span class="close" @click="showUpdateModal = false">&times;</span>
-                <form @submit.prevent="updateInvoice">
-                    <label for="id">ID:</label>
-                    <input type="text" v-model="selectedInvoice.id" required disabled />
+            <!-- Update Invoice Modal -->
+            <div v-if="showUpdateModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" @click="showUpdateModal = false">&times;</span>
+                    <form @submit.prevent="updateInvoice">
+                        <label for="id">ID:</label>
+                        <input type="text" v-model="selectedInvoice.id" required disabled />
 
-                    <label for="date">Date:</label>
-                    <input type="text" v-model="selectedInvoice.date" required />
+                        <label for="date">Date:</label>
+                        <input type="text" v-model="selectedInvoice.date" required />
 
-                    <label for="total">Total:</label>
-                    <input type="text" v-model="selectedInvoice.total" required />
+                        <label for="total">Total:</label>
+                        <input type="text" v-model="selectedInvoice.total" required />
 
-                    <label for="order">Order:</label>
-                    <select v-model="selectedInvoice.order" required>
-                        <option v-for="order in orders" :value="order.id" :key="order.id">{{ order.id }}</option>
-                    </select>
+                        <label for="order">Order:</label>
+                        <select v-model="selectedInvoice.order" required>
+                            <option v-for="order in orders" :value="order.id" :key="order.id">{{ order.id }}</option>
+                        </select>
 
-                    <button type="submit">Update</button>
-                </form>
+                        <button type="submit">Actualizar Bar</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -120,6 +134,16 @@ export default {
         };
     },
     methods: {
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
         fetchInvoices() {
             this.isLoading = true;
             axios.get('http://localhost:8090/invoice/listar')
@@ -138,7 +162,7 @@ export default {
             axios.get('http://localhost:8090/order/listar')
                 .then(response => {
                     this.orders = response.data.reduce((acc, order) => {
-                        acc[order.id] = order;
+                        acc[order.id_order] = order;
                         return acc;
                     }, {});
                 })
@@ -150,25 +174,25 @@ export default {
                 });
         },
         saveInvoice() {
-    this.isLoading = true;
-    axios.post('http://localhost:8090/invoice/registrar', this.newInvoice)
-        .then(() => {
-            this.fetchInvoices();
-            this.newInvoice = {
-                id: 0,
-                total: '',
-                dates: '',
-                id_order: ''
-            };
-            this.showModal = false;
-        })
-        .catch(error => {
-            console.error(error);
-        })
-        .finally(() => {
-            this.isLoading = false;
-        });
-},
+            this.isLoading = true;
+            axios.post('http://localhost:8090/invoice/registrar', this.newInvoice)
+                .then(() => {
+                    this.fetchInvoices();
+                    this.newInvoice = {
+                        id: 0,
+                        total: '',
+                        dates: '',
+                        id_order: ''
+                    };
+                    this.showModal = false;
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                .finally(() => {
+                    this.isLoading = false;
+                });
+        },
         updateInvoice() {
             this.isLoading = true;
             axios.put(`http://localhost:8090/invoice/actualizar/${this.selectedInvoice.id}`, this.selectedInvoice)
@@ -211,28 +235,47 @@ export default {
         this.fetchOrders();
     },
     computed: {
-    filteredInvoices() {
-        return this.invoices.filter(invoice => {
-            const id = String(invoice.id);
-            const date = String(invoice.date);
-            const total = String(invoice.total);
-            const orderName = this.orders[invoice.order] ? this.orders[invoice.order].name : '';
+        filteredAndPaginatedInvoices() {
+            const filtered = this.invoices.filter(invoice => {
+                return Object.values(invoice).some(val => {
+                    if (val === null || val === undefined) {
+                        return false;
+                    }
 
-            return id.includes(this.search) ||
-                   date.includes(this.search) ||
-                   total.includes(this.search) ||
-                   orderName.includes(this.search);
-        });
-    },
-    paginatedInvoices() {
-        const start = (this.currentPage - 1) * this.itemsPerPage;
-        const end = start + this.itemsPerPage;
-        return this.filteredInvoices.slice(start, end);
-    },
-    totalPages() {
-        return Math.ceil(this.filteredInvoices.length / this.itemsPerPage);
+                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.search.toLowerCase();
+
+                    return lowerCaseVal.includes(lowerCaseSearch);
+                });
+            });
+
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+
+            return filtered.slice(start, end);
+        },
+        totalPages() {
+            const filtered = this.invoices.filter(invoice => {
+                return Object.values(invoice).some(val => {
+                    if (val === null || val === undefined) {
+                        return false;
+                    }
+
+                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.search.toLowerCase();
+
+                    return lowerCaseVal.includes(lowerCaseSearch);
+                });
+            });
+
+            return Math.ceil(filtered.length / this.itemsPerPage);
+        },
+        paginatedData() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.invoices.slice(start, end);
+        }
     }
-}
 
 };
 </script>
@@ -252,6 +295,7 @@ export default {
 
 .no-results span {
     font-size: 2em;
+    /* Ajusta este valor para cambiar el tamaño del texto */
 }
 
 .search-input {
@@ -264,6 +308,7 @@ export default {
 .search-input::placeholder {
     font-weight: bold;
 }
+
 
 body {
     font-family: Helvetica Neue, Arial, sans-serif;
@@ -280,6 +325,9 @@ th {
     background-color: #0F5944;
     color: rgba(255, 255, 255, 0.66);
     cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 
@@ -322,6 +370,7 @@ th.active .arrow {
     border-top: 4px solid #fff;
 }
 
+
 .pagination {
     display: flex;
     justify-content: space-between;
@@ -342,60 +391,77 @@ th.active .arrow {
 table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid rgba(224, 224, 224, 1);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+thead {
+    background-color: #f8f9fa;
 }
 
 th,
 td {
+    padding: 10px;
     text-align: left;
-    padding: 16px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
 }
 
-th {
-    background-color: #f8f8f8;
-}
-
-th:first-child {
-    border-radius: 10px 0 0 0;
-}
-
-th:last-child {
-    border-radius: 0 10px 0 0;
-}
-
-td:first-child {
-    border-radius: 0 0 0 10px;
-}
-
-td:last-child {
-    border-radius: 0 0 10px 0;
+tr:hover {
+    background-color: #f5f5f5;
 }
 
 button {
-    padding: 8px 12px;
-    border-radius: 4px;
+    background-color: #0F5944;
+    /* Green */
     border: none;
-    cursor: pointer;
-}
-
-.add {
-    background-color: #00FF00;
-    color: #FFFFFF;
-}
-
-.update {
-    background-color: #FFFF00;
-    color: #000000;
-}
-
-.delete {
-    background-color: #FF0000;
-    color: #FFFFFF;
-}
-
-.loader {
+    color: white;
+    padding: 10px 20px;
     text-align: center;
-    padding: 20px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+button:hover {
+    background-color: #F28A2E;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+}
+
+label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+    background-color: #2614a1;
 }
 
 .modal {
@@ -409,18 +475,19 @@ button {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
     background-color: #fefefe;
+    margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
 }
 
 .close {
-    color: #aaa;
+    color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -428,8 +495,195 @@ button {
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Aumenta la opacidad para oscurecer el fondo */
+    color: white;
+    font-size: 48px;
+    /* Aumenta el tamaño de la fuente */
+}
+
+.delete {
+    background-color: #F28A2E;
+
+}
+
+.update {
+    background-color: #11BFBF;
+
+}
+
+.add {
+    background-color: #90BF2A;
+
+}
+
+
+.flower-spinner,
+.flower-spinner * {
+    box-sizing: border-box;
+}
+
+.flower-spinner {
+    height: 70px;
+    width: 70px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.flower-spinner .dots-container {
+    height: calc(70px / 7);
+    width: calc(70px / 7);
+}
+
+.flower-spinner .smaller-dot {
+    background: #0cb6b9;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    animation: flower-spinner-smaller-dot-animation 2.5s 0s infinite both;
+
+}
+
+.flower-spinner .bigger-dot {
+    background: #0cb6b9;
+    height: 100%;
+    width: 100%;
+    padding: 10%;
+    border-radius: 50%;
+    animation: flower-spinner-bigger-dot-animation 2.5s 0s infinite both;
+}
+
+@keyframes flower-spinner-bigger-dot-animation {
+
+    0%,
+    100% {
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    25%,
+    75% {
+        box-shadow: rgb(12, 182, 185) 26px 0px 0px,
+            rgb(12, 182, 185) -26px 0px 0px,
+            rgb(12, 182, 185) 0px 26px 0px,
+            rgb(12, 182, 185) 0px -26px 0px,
+            rgb(12, 182, 185) 19px -19px 0px,
+            rgb(12, 182, 185) 19px 19px 0px,
+            rgb(12, 182, 185) -19px -19px 0px,
+            rgb(12, 182, 185) -19px 19px 0px;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
+    }
+}
+
+@keyframes flower-spinner-smaller-dot-animation {
+
+    0%,
+    100% {
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
+    }
+
+    25%,
+    75% {
+        box-shadow: rgb(12, 182, 185) 14px 0px 0px,
+            rgb(12, 182, 185) -14px 0px 0px,
+            rgb(12, 182, 185) 0px 14px 0px,
+            rgb(12, 182, 185) 0px -14px 0px,
+            rgb(12, 182, 185) 10px -10px 0px,
+            rgb(12, 182, 185) 10px 10px 0px,
+            rgb(12, 182, 185) -10px -10px 0px,
+            rgb(12, 182, 185) -10px 10px 0px;
+    }
+
+    100% {
+        box-shadow: rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px,
+            rgb(12, 182, 185) 0px 0px 0px;
+    }
 }
 </style>
