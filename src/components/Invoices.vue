@@ -48,17 +48,17 @@
                 <span class="close" @click="showModal = false">&times;</span>
                 <form @submit.prevent="saveInvoice">
 
-
                     <label for="date">Date:</label>
-                    <input type="text" v-model="newInvoice.date" required />
+                    <input type="text" v-model="newInvoice.dates" required />
 
                     <label for="total">Total:</label>
                     <input type="text" v-model="newInvoice.total" required />
 
                     <label for="order">Order:</label>
-                    <select v-model="newInvoice.order" required>
+                    <select v-model="newInvoice.id_order" required>
                         <option v-for="order in orders" :value="order.id" :key="order.id">{{ order.id }}</option>
                     </select>
+
 
                     <button type="submit">Save</button>
                 </form>
@@ -106,32 +106,17 @@ export default {
             showModal: false,
             showUpdateModal: false,
             search: '',
-            newOrder: {
-                "id": '',
-                "dates": '',
-                "idcustomers": '',
-                "idpubs": '',
-                "idusers": ''
-            },
             newInvoice: {
                 id: '',
                 date: '',
                 total: '',
-                order: ''
+                id_order: ''
             },
             selectedInvoice: {
-                id: '',
-                date: '',
+                dates: '',
                 total: '',
-                order: ''
+                id_order: ''
             },
-            selectedOrder: {
-                "id": '',
-                "dates": '',
-                "idcustomers": '',
-                "idpubs": '',
-                "idusers": ''
-            }
         };
     },
     methods: {
@@ -165,35 +150,34 @@ export default {
                 });
         },
         saveInvoice() {
-            this.isLoading = true;
-            axios.post('http://localhost:8090/invoice', this.newInvoice)
-                .then(() => {
-                    this.fetchInvoices();
-                    this.newInvoice = {
-                        id: '',
-                        date: '',
-                        total: '',
-                        newOrder: ''
-                    };
-                    this.showModal = false;
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    this.isLoading = false;
-                });
-        },
+    this.isLoading = true;
+    axios.post('http://localhost:8090/invoice/registrar', this.newInvoice)
+        .then(() => {
+            this.fetchInvoices();
+            this.newInvoice = {
+                id: 0,
+                total: '',
+                dates: '',
+                id_order: ''
+            };
+            this.showModal = false;
+        })
+        .catch(error => {
+            console.error(error);
+        })
+        .finally(() => {
+            this.isLoading = false;
+        });
+},
         updateInvoice() {
             this.isLoading = true;
-            axios.put(`http://localhost:8090/invoice/${this.selectedInvoice.id}`, this.selectedInvoice)
+            axios.put(`http://localhost:8090/invoice/actualizar/${this.selectedInvoice.id}`, this.selectedInvoice)
                 .then(() => {
                     this.fetchInvoices();
                     this.selectedInvoice = {
-                        id: '',
-                        date: '',
+                        dates: '',
                         total: '',
-                        order: ''
+                        id_order: ''
                     };
                     this.showUpdateModal = false;
                 })
@@ -206,7 +190,7 @@ export default {
         },
         deleteInvoice(id) {
             this.isLoading = true;
-            axios.delete(`http://localhost:8090/invoice/${id}`)
+            axios.put(`http://localhost:8090/invoice/eliminar/${id}`)
                 .then(() => {
                     this.fetchInvoices();
                 })
@@ -227,23 +211,29 @@ export default {
         this.fetchOrders();
     },
     computed: {
-        filteredInvoices() {
-            return this.invoices.filter(invoice =>
-                invoice.id.includes(this.search) ||
-                invoice.date.includes(this.search) ||
-                invoice.total.includes(this.search) ||
-                (this.orders[invoice.order] && this.orders[invoice.order].name.includes(this.search))
-            );
-        },
-        paginatedInvoices() {
-            const start = (this.currentPage - 1) * this.itemsPerPage;
-            const end = start + this.itemsPerPage;
-            return this.filteredInvoices.slice(start, end);
-        },
-        totalPages() {
-            return Math.ceil(this.filteredInvoices.length / this.itemsPerPage);
-        }
+    filteredInvoices() {
+        return this.invoices.filter(invoice => {
+            const id = String(invoice.id);
+            const date = String(invoice.date);
+            const total = String(invoice.total);
+            const orderName = this.orders[invoice.order] ? this.orders[invoice.order].name : '';
+
+            return id.includes(this.search) ||
+                   date.includes(this.search) ||
+                   total.includes(this.search) ||
+                   orderName.includes(this.search);
+        });
+    },
+    paginatedInvoices() {
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        return this.filteredInvoices.slice(start, end);
+    },
+    totalPages() {
+        return Math.ceil(this.filteredInvoices.length / this.itemsPerPage);
     }
+}
+
 };
 </script>
 
