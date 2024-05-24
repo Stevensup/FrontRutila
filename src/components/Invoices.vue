@@ -67,7 +67,7 @@
                         <input type="date" v-model="newInvoice.dates" required />
 
                         <label for="total">Total:</label>
-                        <input type="text" v-model="newInvoice.total" required />
+                        <input type="number" v-model="newInvoice.total" required />
 
                         <label for="order">Order:</label>
                         <select v-model="newInvoice.id_order" required>
@@ -174,7 +174,6 @@ export default {
                 });
         },
         saveInvoice() {
-            this.isLoading = true;
             axios.post('http://localhost:8090/invoice/registrar', this.newInvoice)
                 .then(() => {
                     this.fetchInvoices();
@@ -194,7 +193,6 @@ export default {
                 });
         },
         updateInvoice() {
-            this.isLoading = true;
             axios.put(`http://localhost:8090/invoice/actualizar/${this.selectedInvoice.id}`, this.selectedInvoice)
                 .then(() => {
                     this.fetchInvoices();
@@ -213,7 +211,6 @@ export default {
                 });
         },
         deleteInvoice(id) {
-            this.isLoading = true;
             axios.put(`http://localhost:8090/invoice/eliminar/${id}`)
                 .then(() => {
                     this.fetchInvoices();

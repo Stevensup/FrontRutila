@@ -15,7 +15,8 @@
                 <h1>Ordenes</h1>
                 <img width="80" height="80" src="../assets/ICONORDEN.png" alt="Imagen">
             </div>
-            <button @click="showModal = true">Agregar Orden</button>
+            <input class="search-input" type="text" v-model="search" placeholder="Buscar...">
+
             <table class="table">
                 <thead>
                     <tr>
@@ -28,21 +29,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="order in orders" :key="order.id">
+                       <tr v-if="filteredAndPaginatedOrders.length === 0">
+                        <td colspan="6">
+                            <div class="no-results">
+                                <img width="250" height="250" src="../assets/tita2.png" alt="Logo de Rutila">
+                                <span>Sin registros coincidentes</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-for="order in filteredAndPaginatedOrders" :key="`${order.id}-${order.dates}-${customers.name}`">
                         <td>{{ order.id }}</td>
                         <td>{{ order.dates }}</td>
                         <td>{{ customers[order.idcustomers] }}</td>
                         <td>{{ bars[order.idpubs] }}</td>
                         <td>{{ users[order.idusers] }}</td>
                         <td>
-                            <button @click="editOrder(order)">Editar</button>
-                            <button @click="deleteOrder(order.id)">Eliminar</button>
+                            <button class="update" @click="editOrder(order)">Editar</button>
+                            <button class="delete" @click="deleteOrder(order.id)">Eliminar</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
-        </div>
+            <div class="pagination">
+                <button @click="prevPage">Página anterior</button>
+                <span>Página {{ currentPage }} de {{ totalPages }}</span>
+                <button @click="nextPage">Página siguiente</button>
+            </div>
+
+            <button class="add" @click="showModal = true">Agregar Orden</button>
 
         <!-- Modal para agregar nueva factura -->
         <div v-if="showModal" class="modal">
@@ -127,6 +142,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -161,6 +177,16 @@ export default {
         }
     },
     methods: {
+        nextPage() {
+        if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
         fetchOrders() {
         axios.get('http://localhost:8090/order/listar')
             .then(response => { this.orders = response.data; })
@@ -254,8 +280,52 @@ export default {
         this.fetchCustomers();
         this.fetchBars();
         this.fetchUsers();
+    },
+    computed: {
+        filteredAndPaginatedOrders() {
+            const filtered = this.orders.filter(order => {
+                return Object.values(order).some(val => {
+                    if (val === null || val === undefined) {
+                        return false;
+                    }
+
+                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.search.toLowerCase();
+
+                    return lowerCaseVal.includes(lowerCaseSearch);
+                });
+            });
+
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+
+            return filtered.slice(start, end);
+        },
+        totalPages() {
+            const filtered = this.orders.filter(order => {
+                return Object.values(order).some(val => {
+                    if (val === null || val === undefined) {
+                        return false;
+                    }
+
+                    const lowerCaseVal = typeof val === 'string' ? val.toLowerCase() : String(val);
+                    const lowerCaseSearch = this.search.toLowerCase();
+
+                    return lowerCaseVal.includes(lowerCaseSearch);
+                });
+            });
+
+            return Math.ceil(filtered.length / this.itemsPerPage);
+        },
+        paginatedData() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.orders.slice(start, end);
+        }
+
     }
-}
+
+};
 </script>
 
 <style scoped>
