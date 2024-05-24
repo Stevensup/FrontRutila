@@ -8,6 +8,7 @@ import Drinks from "./components/Drinks.vue";
 import DrinksType from "./components/DrinksType.vue";
 import Invoices from "./components/Invoices.vue";
 import Orders from "./components/Orders.vue";
+import PieChart from "./components/PieChart.vue";
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
     path: "/Orders",
     name: "Orders",
     component: Orders
+  },
+  {
+    path:"/PieChart",
+    name:"PieChart",
+    component: PieChart
   }
 ];
 

@@ -8,13 +8,16 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.4.3",
     "core-js": "^3.8.3",
+    "echarts": "^5.5.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "sweetalert": "^2.1.2",
     "vue": "^3.2.13",
+    "vue-chartjs": "^5.3.1",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
