@@ -38,8 +38,8 @@
                     <tr v-for="invoice in filteredAndPaginatedInvoices" :key="invoice.id">
                         <td>{{ invoice.id }}</td>
                         <td>{{ invoice.dates }}</td>
-                        <td>{{ invoice.total }}</td>
-                        <td>{{ orders.id_order }}</td>
+                        <td>$ {{ invoice.total }}</td>
+                        <td># Orden {{ orders[invoice.id_order] ? orders[invoice.id_order].id : '' }}</td>
                         <td>
                             <button class="delete" @click="deleteInvoice(invoice.id)">Delete</button>
                             <button class="update"
@@ -64,7 +64,7 @@
                     <form @submit.prevent="saveInvoice">
 
                         <label for="date">Date:</label>
-                        <input type="text" v-model="newInvoice.dates" required />
+                        <input type="date" v-model="newInvoice.dates" required />
 
                         <label for="total">Total:</label>
                         <input type="text" v-model="newInvoice.total" required />
@@ -87,14 +87,14 @@
                         <input type="text" v-model="selectedInvoice.id" required disabled />
 
                         <label for="date">Date:</label>
-                        <input type="text" v-model="selectedInvoice.date" required />
+                        <input type="date" v-model="selectedInvoice.dates" required />
 
                         <label for="total">Total:</label>
                         <input type="text" v-model="selectedInvoice.total" required />
 
                         <label for="order">Order:</label>
                         <select v-model="selectedInvoice.order" required>
-                            <option v-for="order in orders" :value="order.id" :key="order.id">{{ order.id }}</option>
+                            <option v-for="order in orders" :value="order.id_order" :key="order.id">{{ order.id }}</option>
                         </select>
 
                         <button type="submit">Actualizar Bar</button>
@@ -162,7 +162,7 @@ export default {
             axios.get('http://localhost:8090/order/listar')
                 .then(response => {
                     this.orders = response.data.reduce((acc, order) => {
-                        acc[order.id_order] = order;
+                        acc[order.id] = order;
                         return acc;
                     }, {});
                 })
